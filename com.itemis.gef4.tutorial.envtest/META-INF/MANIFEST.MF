@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Environment Test
+Bundle-SymbolicName: com.itemis.gef4.tutorial.envtest
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: ITEMIS
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
