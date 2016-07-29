@@ -1,23 +1,44 @@
 package com.itemis.gef4.tutorial.mindmap;
 
+import javax.inject.Provider;
+
 import org.eclipse.gef4.common.adapt.AdapterKey;
+import org.eclipse.gef4.common.adapt.inject.AdaptableScopes;
+import org.eclipse.gef4.common.adapt.inject.AdapterMap;
 import org.eclipse.gef4.common.adapt.inject.AdapterMaps;
+import org.eclipse.gef4.mvc.behaviors.HoverBehavior;
+import org.eclipse.gef4.mvc.behaviors.SelectionBehavior;
 import org.eclipse.gef4.mvc.fx.MvcFxModule;
+import org.eclipse.gef4.mvc.fx.behaviors.FXFocusBehavior;
+import org.eclipse.gef4.mvc.fx.parts.FXDefaultFocusFeedbackPartFactory;
 import org.eclipse.gef4.mvc.fx.parts.FXDefaultHoverFeedbackPartFactory;
+import org.eclipse.gef4.mvc.fx.parts.FXDefaultHoverHandlePartFactory;
 import org.eclipse.gef4.mvc.fx.parts.FXDefaultSelectionFeedbackPartFactory;
+import org.eclipse.gef4.mvc.fx.parts.FXDefaultSelectionHandlePartFactory;
+import org.eclipse.gef4.mvc.fx.parts.FXRootPart;
 import org.eclipse.gef4.mvc.fx.policies.FXFocusAndSelectOnClickPolicy;
 import org.eclipse.gef4.mvc.fx.policies.FXHoverOnHoverPolicy;
 import org.eclipse.gef4.mvc.fx.providers.ShapeBoundsProvider;
 import org.eclipse.gef4.mvc.fx.providers.ShapeOutlineProvider;
+import org.eclipse.gef4.mvc.fx.viewer.FXViewer;
+import org.eclipse.gef4.mvc.models.ContentModel;
+import org.eclipse.gef4.mvc.models.FocusModel;
+import org.eclipse.gef4.mvc.models.HoverModel;
+import org.eclipse.gef4.mvc.models.SelectionModel;
 import org.eclipse.gef4.mvc.parts.IContentPartFactory;
 
+import com.google.common.reflect.TypeToken;
+import com.google.inject.Binder;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
+import com.itemis.gef4.tutorial.mindmap.palette.parts.PaletteContentsFactory;
+import com.itemis.gef4.tutorial.mindmap.palette.parts.PaletteModelPart;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapContentsFactory;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapNodeAnchorProvider;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapNodePart;
 
 import javafx.scene.Node;
+import javafx.scene.paint.Color;
 
 /**
  * The MindMapModule configures the whole dependency injection and adapter framework.
@@ -29,14 +50,34 @@ import javafx.scene.Node;
  *
  */
 public class MindMapModule extends MvcFxModule {
-
+	
+	private MindMapPaletteModuleExtension extension; 
+	
+	public MindMapModule() {
+		extension = new MindMapPaletteModuleExtension();
+	}
+	
 	@Override
 	protected void configure() {
 		super.configure();
 		
 		bindMindMapNodePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), MindMapNodePart.class));
+		
+		extension.configure(this);
+	}
+
+	@Override
+	public Binder binder() {
+		return super.binder();
 	}
 	
+	@Override
+	protected void bindFXDomainAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		super.bindFXDomainAdapters(adapterMapBinder);
+		
+		extension.bindFXDomainAdapters(adapterMapBinder);
+	}
+
 	@Override
 	protected void bindIContentPartFactoryAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		super.bindIContentPartFactoryAsContentViewerAdapter(adapterMapBinder);
@@ -51,6 +92,13 @@ public class MindMapModule extends MvcFxModule {
 		// some policies who manage the behaviour on mouse events on all of the content parts
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXFocusAndSelectOnClickPolicy.class);
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXHoverOnHoverPolicy.class);
+	}
+	
+	@Override
+	protected void bindFocusFeedbackPartFactoryAsContentViewerAdapter(
+			MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder.addBinding(AdapterKey.role(FXFocusBehavior.FOCUS_FEEDBACK_PART_FACTORY))
+			.to(FXDefaultFocusFeedbackPartFactory.class);
 	}
 	
 	protected void bindMindMapNodePartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
