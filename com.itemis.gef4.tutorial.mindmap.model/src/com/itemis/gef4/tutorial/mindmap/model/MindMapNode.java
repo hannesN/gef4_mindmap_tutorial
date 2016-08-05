@@ -10,8 +10,8 @@ import com.google.common.collect.Lists;
 import javafx.scene.paint.Color;
 
 /**
- * 
- * 
+ *
+ *
  * @author hniederhausen
  *
  */
@@ -23,7 +23,7 @@ public class MindMapNode extends AbstractMindMapModel implements Serializable {
 	public static final String PROP_DESCRIPTION = "description";
 	public static final String PROP_COLOR = "color";
 	public static final String PROP_BOUNDS = "bounds";
-	
+
 	public static final String PROP_INCOMING_CONNECTIONS = "incomingConnections";
 	public static final String PROP_OUTGOGING_CONNECTIONS = "outgoingConnections";
 
@@ -41,7 +41,7 @@ public class MindMapNode extends AbstractMindMapModel implements Serializable {
 	 * The background color of hte node
 	 */
 	private Color color;
-	
+
 	/**
 	 * The size and position of the visual representation
 	 */
@@ -50,54 +50,22 @@ public class MindMapNode extends AbstractMindMapModel implements Serializable {
 	private List<Connection> incomingConnections = Lists.newArrayList();
 	private List<Connection> outgoingConnections = Lists.newArrayList();
 
-	public String getTite() {
-		return title;
+	public MindMapNode() {
+
+		bounds = new Rectangle(0, 0, 70, 30);
+		color = Color.LIGHTGREEN;
 	}
 
-	public void setTite(String title) {
-		pcs.firePropertyChange(PROP_TITLE, this.title, (this.title = title));
-	}
+	public MindMapNode(MindMapNode original) {
+		this.title = original.getTite();
+		this.description = original.getDescription();
 
-	public String getDescription() {
-		return description;
-	}
+		this.bounds = original.getBounds().getCopy();
 
-	public void setDescription(String description) {
-		pcs.firePropertyChange(PROP_DESCRIPTION, this.description, (this.description = description));
-	}
+		Color origCol = original.getColor();
+		this.color = new Color(origCol.getRed(), origCol.getGreen(), origCol.getBlue(), origCol.getOpacity());
 
-	public Color getColor() {
-		return color;
-	}
-
-	public void setColor(Color color) {
-		pcs.firePropertyChange(PROP_COLOR, this.color, (this.color = color));
-	}
-	
-	public Rectangle getBounds() {
-		return bounds;
-	}
-	
-	public void setBounds(Rectangle bounds) {
-		pcs.firePropertyChange(PROP_BOUNDS, this.bounds, (this.bounds = bounds.getCopy()));
-	}
-	
-	public List<Connection> getOutgoingConnections() {
-		return outgoingConnections;
-	}
-
-	public void addOutgoingConnection(Connection conn) {
-		outgoingConnections.add(conn);
-		pcs.firePropertyChange(PROP_OUTGOGING_CONNECTIONS, null, conn);
-	}
-
-	public void removeOutgoingConnection(Connection conn) {
-		outgoingConnections.remove(conn);
-		pcs.firePropertyChange(PROP_OUTGOGING_CONNECTIONS, conn, null);
-	}
-	
-	public List<Connection> getIncomingConnections() {
-		return incomingConnections;
+		// TODO copy connections
 	}
 
 	public void addIncomingConnection(Connection conn) {
@@ -105,9 +73,59 @@ public class MindMapNode extends AbstractMindMapModel implements Serializable {
 		pcs.firePropertyChange(PROP_INCOMING_CONNECTIONS, null, conn);
 	}
 
+	public void addOutgoingConnection(Connection conn) {
+		outgoingConnections.add(conn);
+		pcs.firePropertyChange(PROP_OUTGOGING_CONNECTIONS, null, conn);
+	}
+
+	public Rectangle getBounds() {
+		return bounds;
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public List<Connection> getIncomingConnections() {
+		return incomingConnections;
+	}
+
+	public List<Connection> getOutgoingConnections() {
+		return outgoingConnections;
+	}
+
+	public String getTite() {
+		return title;
+	}
+
 	public void removeIncomingConnection(Connection conn) {
 		incomingConnections.remove(conn);
 		pcs.firePropertyChange(PROP_INCOMING_CONNECTIONS, conn, null);
+	}
+
+	public void removeOutgoingConnection(Connection conn) {
+		outgoingConnections.remove(conn);
+		pcs.firePropertyChange(PROP_OUTGOGING_CONNECTIONS, conn, null);
+	}
+
+	public void setBounds(Rectangle bounds) {
+		pcs.firePropertyChange(PROP_BOUNDS, this.bounds, (this.bounds = bounds.getCopy()));
+	}
+
+	public void setColor(Color color) {
+		pcs.firePropertyChange(PROP_COLOR, this.color, (this.color = color));
+	}
+
+	public void setDescription(String description) {
+		pcs.firePropertyChange(PROP_DESCRIPTION, this.description, (this.description = description));
+	}
+
+	public void setTite(String title) {
+		pcs.firePropertyChange(PROP_TITLE, this.title, (this.title = title));
 	}
 
 }

@@ -30,8 +30,11 @@ public class MindMapPart extends AbstractFXContentPart<Group> {
 	protected List<? extends Object> doGetContentChildren() {
 		List<Object> children = Lists.newArrayList();
 		
-		children.addAll(getContent().getNodes());
+		
 		children.addAll(getContent().getConnections());
+		
+		children.addAll(getContent().getNodes());
+		
 		
 		return children;
 	}

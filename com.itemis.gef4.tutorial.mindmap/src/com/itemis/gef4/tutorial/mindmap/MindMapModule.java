@@ -1,44 +1,28 @@
 package com.itemis.gef4.tutorial.mindmap;
 
-import javax.inject.Provider;
-
 import org.eclipse.gef4.common.adapt.AdapterKey;
-import org.eclipse.gef4.common.adapt.inject.AdaptableScopes;
-import org.eclipse.gef4.common.adapt.inject.AdapterMap;
 import org.eclipse.gef4.common.adapt.inject.AdapterMaps;
-import org.eclipse.gef4.mvc.behaviors.HoverBehavior;
-import org.eclipse.gef4.mvc.behaviors.SelectionBehavior;
 import org.eclipse.gef4.mvc.fx.MvcFxModule;
 import org.eclipse.gef4.mvc.fx.behaviors.FXFocusBehavior;
 import org.eclipse.gef4.mvc.fx.parts.FXDefaultFocusFeedbackPartFactory;
 import org.eclipse.gef4.mvc.fx.parts.FXDefaultHoverFeedbackPartFactory;
-import org.eclipse.gef4.mvc.fx.parts.FXDefaultHoverHandlePartFactory;
 import org.eclipse.gef4.mvc.fx.parts.FXDefaultSelectionFeedbackPartFactory;
-import org.eclipse.gef4.mvc.fx.parts.FXDefaultSelectionHandlePartFactory;
-import org.eclipse.gef4.mvc.fx.parts.FXRootPart;
 import org.eclipse.gef4.mvc.fx.policies.FXFocusAndSelectOnClickPolicy;
 import org.eclipse.gef4.mvc.fx.policies.FXHoverOnHoverPolicy;
 import org.eclipse.gef4.mvc.fx.providers.ShapeBoundsProvider;
 import org.eclipse.gef4.mvc.fx.providers.ShapeOutlineProvider;
-import org.eclipse.gef4.mvc.fx.viewer.FXViewer;
-import org.eclipse.gef4.mvc.models.ContentModel;
-import org.eclipse.gef4.mvc.models.FocusModel;
-import org.eclipse.gef4.mvc.models.HoverModel;
-import org.eclipse.gef4.mvc.models.SelectionModel;
 import org.eclipse.gef4.mvc.parts.IContentPartFactory;
 
-import com.google.common.reflect.TypeToken;
 import com.google.inject.Binder;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
-import com.itemis.gef4.tutorial.mindmap.palette.parts.PaletteContentsFactory;
-import com.itemis.gef4.tutorial.mindmap.palette.parts.PaletteModelPart;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapContentsFactory;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapNodeAnchorProvider;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapNodePart;
+import com.itemis.gef4.tutorial.mindmap.policies.CreateNodeOnClickPolicy;
+import com.itemis.gef4.tutorial.mindmap.policies.FocusAndSelectOnClickPolicy;
 
 import javafx.scene.Node;
-import javafx.scene.paint.Color;
 
 /**
  * The MindMapModule configures the whole dependency injection and adapter framework.
@@ -72,6 +56,11 @@ public class MindMapModule extends MvcFxModule {
 	}
 	
 	@Override
+	protected void bindSelectionModel() {
+	}
+	
+	
+	@Override
 	protected void bindFXDomainAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		super.bindFXDomainAdapters(adapterMapBinder);
 		
@@ -87,31 +76,43 @@ public class MindMapModule extends MvcFxModule {
 	}
 	
 	@Override
-	protected void bindAbstractContentPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		super.bindAbstractContentPartAdapters(adapterMapBinder);
-		// some policies who manage the behaviour on mouse events on all of the content parts
-		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXFocusAndSelectOnClickPolicy.class);
-		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXHoverOnHoverPolicy.class);
-	}
-	
-	@Override
 	protected void bindFocusFeedbackPartFactoryAsContentViewerAdapter(
 			MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		adapterMapBinder.addBinding(AdapterKey.role(FXFocusBehavior.FOCUS_FEEDBACK_PART_FACTORY))
 			.to(FXDefaultFocusFeedbackPartFactory.class);
 	}
 	
+	@Override
+	protected void bindFocusAndSelectOnClickPolicyAsFXRootPartAdapter(
+			MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FocusAndSelectOnClickPolicy.class);
+	}
+	
+	@Override
+	protected void bindContentViewerRootPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		super.bindContentViewerRootPartAdapters(adapterMapBinder);
+		
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(CreateNodeOnClickPolicy.class);
+	}
+	
 	protected void bindMindMapNodePartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		
 		// provides a hover feedback to the shape, on mouse over. We need at least one of such a provider
 		// or the anchor wouldn't find a IGeomtry interface to calculate the anchor - this is really weird
-		AdapterKey<?> role = AdapterKey.role(FXDefaultHoverFeedbackPartFactory.HOVER_FEEDBACK_GEOMETRY_PROVIDER);
-		adapterMapBinder.addBinding(role).to(ShapeBoundsProvider.class);
+		AdapterKey<?> key = AdapterKey.role(FXDefaultHoverFeedbackPartFactory.HOVER_FEEDBACK_GEOMETRY_PROVIDER);
+		adapterMapBinder.addBinding(key).to(ShapeBoundsProvider.class);
 		
-		role = AdapterKey.role(FXDefaultSelectionFeedbackPartFactory.SELECTION_FEEDBACK_GEOMETRY_PROVIDER);
-		adapterMapBinder.addBinding(role).to(ShapeOutlineProvider.class);
+		key = AdapterKey.role(FXDefaultSelectionFeedbackPartFactory.SELECTION_FEEDBACK_GEOMETRY_PROVIDER);
+		adapterMapBinder.addBinding(key).to(ShapeOutlineProvider.class);
+		
+		key = AdapterKey.role(MindMapNodeAnchorProvider.ANCHOR_GEOMETRY_PROVIDER);
+		adapterMapBinder.addBinding(key).to(ShapeOutlineProvider.class);
+		
 		
 		// bind anchor provider
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(MindMapNodeAnchorProvider.class);
+		
+		// bind the focus policy
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXFocusAndSelectOnClickPolicy.class);
 	}
 }

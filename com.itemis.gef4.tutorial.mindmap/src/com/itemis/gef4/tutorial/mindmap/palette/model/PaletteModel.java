@@ -3,6 +3,7 @@ package com.itemis.gef4.tutorial.mindmap.palette.model;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import com.itemis.gef4.tutorial.mindmap.model.MindMapNode;
 import com.itemis.gef4.tutorial.mindmap.visuals.MindMapNodeVisual;
 
 
@@ -14,11 +15,9 @@ import com.itemis.gef4.tutorial.mindmap.visuals.MindMapNodeVisual;
  */
 public class PaletteModel {
 
-	private static PaletteEntry NODE_ENTRY = new PaletteEntry("New Node", new MindMapNodeVisual());
+	private static PaletteNodeEntry NODE_ENTRY = new PaletteNodeEntry("New Node", new MindMapNodeVisual(), new MindMapNode());
 	
-	
-	
-	public List<PaletteEntry> getEntries() {
+	public List<PaletteNodeEntry> getEntries() {
 		return Lists.newArrayList(NODE_ENTRY);
 	}
 	

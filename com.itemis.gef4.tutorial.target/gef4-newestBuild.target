@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.8"?><target name="GEF4" sequenceNumber="30">
+<locations>
+<location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.platform.feature.group" version="4.6.0.v20160606-1342"/>
+<unit id="org.eclipse.equinox.executable.feature.group" version="3.6.300.v20160525-1303"/>
+<repository location="http://download.eclipse.org/releases/neon/"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.fx.ide.fxgraph.feature.feature.group" version="2.3.0.201603030809"/>
+<unit id="org.eclipse.fx.ide.css.feature.feature.group" version="2.3.0.201603030809"/>
+<unit id="org.eclipse.fx.ide.l10n.feature.feature.group" version="2.3.0.201603030809"/>
+<unit id="org.eclipse.fx.ide.fxml.feature.feature.group" version="2.3.0.201603030809"/>
+<unit id="org.eclipse.fx.ide.rrobot.feature.feature.group" version="2.3.0.201603030809"/>
+<unit id="org.eclipse.fx.ide.gmod.feature.feature.group" version="2.3.0.201603030809"/>
+<unit id="org.eclipse.fx.ide.pde.feature.feature.group" version="2.3.0.201603030809"/>
+<unit id="org.eclipse.fx.ide.basic.feature.feature.group" version="2.3.0.201603030809"/>
+<unit id="org.eclipse.fx.ide.converter.feature.feature.group" version="2.3.0.201603030809"/>
+<unit id="org.eclipse.fx.ide.ldef.feature.feature.group" version="2.3.0.201603030809"/>
+<repository location="http://download.eclipse.org/efxclipse/updates-released/2.3.0/site"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.gef4.mvc.compatibility.equinox.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.dot.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.graph.doc.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.zest.sdk.feature.group" version="1.1.0.201608040202"/>
+<unit id="org.eclipse.gef4.layout.source.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.mvc.doc.feature.group" version="1.1.0.201608040202"/>
+<unit id="org.eclipse.gef4.fx.sdk.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.geometry.doc.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.mvc.fx.ui.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.zest.fx.compatibility.equinox.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.mvc.sdk.feature.group" version="1.1.0.201608040202"/>
+<unit id="org.eclipse.gef4.common.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.fx.jface.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.layout.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.zest.fx.jface.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.cloudio.doc.user.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.geometry.sdk.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.cloudio.doc.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.zest.doc.feature.group" version="1.1.0.201608040202"/>
+<unit id="org.eclipse.gef4.geometry.convert.swt.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.zest.fx.source.feature.group" version="1.1.0.201608040202"/>
+<unit id="org.eclipse.gef4.mvc.source.feature.group" version="1.1.0.201608040202"/>
+<unit id="org.eclipse.gef4.dot.doc.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.layout.doc.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.mvc.fx.compatibility.equinox.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.zest.fx.feature.group" version="1.1.0.201608040202"/>
+<unit id="org.eclipse.gef4.zest.fx.jface.source.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.layout.sdk.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.mvc.examples.source.feature.group" version="1.1.0.201608040202"/>
+<unit id="org.eclipse.gef4.cloudio.sdk.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.fx.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.graph.source.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.zest.examples.feature.group" version="1.1.0.201608040202"/>
+<unit id="org.eclipse.gef4.geometry.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.geometry.convert.fx.source.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.dot.ui.source.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.dot.ui.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.geometry.source.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.fx.jface.source.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.graph.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.fx.doc.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.geometry.convert.fx.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.mvc.ui.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.mvc.feature.group" version="1.1.0.201608040202"/>
+<unit id="org.eclipse.gef4.fx.swt.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.fx.compatibility.equinox.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.mvc.examples.feature.group" version="1.1.0.201608040202"/>
+<unit id="org.eclipse.gef4.dot.source.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.common.sdk.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.common.source.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.fx.swt.source.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.zest.fx.ui.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.dot.sdk.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.mvc.fx.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.dot.doc.user.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.common.doc.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.fx.source.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.mvc.ui.source.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.cloudio.ui.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.geometry.convert.swt.source.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.mvc.fx.ui.source.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.graph.sdk.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.mvc.fx.source.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.zest.fx.ui.source.feature.group" version="1.0.1.201608040202"/>
+<unit id="org.eclipse.gef4.zest.examples.source.feature.group" version="1.1.0.201608040202"/>
+<unit id="org.eclipse.gef4.cloudio.ui.source.feature.group" version="1.0.1.201608040202"/>
+<repository location="https://hudson.eclipse.org/gef/job/gef4-maintenance/lastSuccessfulBuild/artifact/update-site/"/>
+</location>
+</locations>
+</target>

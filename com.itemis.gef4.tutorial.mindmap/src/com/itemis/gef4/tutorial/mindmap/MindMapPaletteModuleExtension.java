@@ -1,7 +1,5 @@
 package com.itemis.gef4.tutorial.mindmap;
 
-import javax.inject.Provider;
-
 import org.eclipse.gef4.common.adapt.AdapterKey;
 import org.eclipse.gef4.common.adapt.inject.AdaptableScopes;
 import org.eclipse.gef4.common.adapt.inject.AdapterMap;
@@ -9,7 +7,6 @@ import org.eclipse.gef4.common.adapt.inject.AdapterMaps;
 import org.eclipse.gef4.mvc.behaviors.ContentBehavior;
 import org.eclipse.gef4.mvc.behaviors.HoverBehavior;
 import org.eclipse.gef4.mvc.behaviors.SelectionBehavior;
-import org.eclipse.gef4.mvc.fx.MvcFxModule;
 import org.eclipse.gef4.mvc.fx.behaviors.FXFocusBehavior;
 import org.eclipse.gef4.mvc.fx.parts.FXDefaultFocusFeedbackPartFactory;
 import org.eclipse.gef4.mvc.fx.parts.FXDefaultHoverFeedbackPartFactory;
@@ -17,6 +14,8 @@ import org.eclipse.gef4.mvc.fx.parts.FXDefaultHoverHandlePartFactory;
 import org.eclipse.gef4.mvc.fx.parts.FXDefaultSelectionFeedbackPartFactory;
 import org.eclipse.gef4.mvc.fx.parts.FXDefaultSelectionHandlePartFactory;
 import org.eclipse.gef4.mvc.fx.parts.FXRootPart;
+import org.eclipse.gef4.mvc.fx.policies.FXFocusAndSelectOnClickPolicy;
+import org.eclipse.gef4.mvc.fx.providers.ShapeBoundsProvider;
 import org.eclipse.gef4.mvc.fx.viewer.FXViewer;
 import org.eclipse.gef4.mvc.models.ContentModel;
 import org.eclipse.gef4.mvc.models.FocusModel;
@@ -25,9 +24,11 @@ import org.eclipse.gef4.mvc.models.SelectionModel;
 
 import com.google.common.reflect.TypeToken;
 import com.google.inject.Binder;
+import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
 import com.itemis.gef4.tutorial.mindmap.palette.parts.PaletteContentsFactory;
+import com.itemis.gef4.tutorial.mindmap.palette.parts.PaletteEntryPart;
 
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -35,20 +36,40 @@ import javafx.scene.paint.Color;
 public class MindMapPaletteModuleExtension {
 
 	public static final String PALETTE_VIEWER_ROLE = "paletteViewer";
-	
+
 	public void configure(MindMapModule module) {
 
 		// palette
-		bindPaletteViewerAdapters(AdapterMaps.getAdapterMapBinder(module.binder(), FXViewer.class, PALETTE_VIEWER_ROLE));
-		bindPaletteViewerRootPartAdapters(AdapterMaps.getAdapterMapBinder(module.binder(), FXRootPart.class, PALETTE_VIEWER_ROLE));
-		// bindPaletteElementPartAdapters(AdapterMaps.getAdapterMapBinder(binder(),
-		// PaletteElementPart.class));
+		bindPaletteViewerAdapters(
+				AdapterMaps.getAdapterMapBinder(module.binder(), FXViewer.class, PALETTE_VIEWER_ROLE));
+		bindPaletteViewerRootPartAdapters(
+				AdapterMaps.getAdapterMapBinder(module.binder(), FXRootPart.class, PALETTE_VIEWER_ROLE));
+
+		bindPaletteEntryPartAdapters(AdapterMaps.getAdapterMapBinder(module.binder(), PaletteEntryPart.class));
 		// AdapterMaps.getAdapterMapBinder(binder(),
 		// PaletteModelPart.class).addBinding(AdapterKey.defaultRole()).to(FXHoverOnHoverPolicy.class);
 	}
 
-	
-	
+	private void bindPaletteEntryPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+
+		// geometry provider for selection feedback
+		adapterMapBinder
+				.addBinding(AdapterKey.role(FXDefaultSelectionFeedbackPartFactory.SELECTION_FEEDBACK_GEOMETRY_PROVIDER))
+				.to(ShapeBoundsProvider.class);
+		// geometry provider for hover feedback
+		adapterMapBinder.addBinding(AdapterKey.role(FXDefaultHoverFeedbackPartFactory.HOVER_FEEDBACK_GEOMETRY_PROVIDER))
+				.to(ShapeBoundsProvider.class);
+
+		// observes selection model and generates feedback
+		// adapterMapBinder.addBinding(AdapterKey.get(new
+		// TypeToken<SelectionBehavior<Node>>() {
+		// })).to(new TypeLiteral<SelectionBehavior<Node>>() {
+		// });
+
+		// insert clicked part into selection and focus model
+		 adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXFocusAndSelectOnClickPolicy.class);
+	}
+
 	/**
 	 * Adds (default) {@link AdapterMap} bindings for {@link FXViewer} and all
 	 * sub-classes. May be overwritten by sub-classes to change the default
@@ -82,7 +103,7 @@ public class MindMapPaletteModuleExtension {
 		// bind root part
 		adapterMapBinder.addBinding(AdapterKey.role(PALETTE_VIEWER_ROLE)).to(FXRootPart.class)
 				.in(AdaptableScopes.typed(FXViewer.class));
-		
+
 		// add hover feedback factory
 		adapterMapBinder.addBinding(AdapterKey.role(SelectionBehavior.SELECTION_FEEDBACK_PART_FACTORY))
 				.to(FXDefaultSelectionFeedbackPartFactory.class);
@@ -110,41 +131,23 @@ public class MindMapPaletteModuleExtension {
 	}
 
 	protected void bindPaletteViewerRootPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		adapterMapBinder.addBinding(
-				AdapterKey.get(new TypeToken<ContentBehavior<Node>>() {
-				})).to(new TypeLiteral<ContentBehavior<Node>>() {
-				});
-		
-		
-		// register (default) interaction policies (which are based on viewer
-		// models and do not depend on transaction policies)
-		// bindFXHoverOnHoverPolicyAsFXRootPartAdapter(adapterMapBinder);
-		// bindFXPanOrZoomOnScrollPolicyAsFXRootPartAdapter(adapterMapBinder);
-		// bindFXPanOnTypePolicyAsFXRootPartAdapter(adapterMapBinder);
-		// register change viewport policy
-		// bindContentRestrictedChangeViewportPolicyAsFXRootPartAdapter(adapterMapBinder);
-		// register default behaviors
-		
-		// XXX: PaletteFocusBehavior only changes the viewer focus and default
-		// styles.
-		// adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(PaletteFocusBehavior.class);
-		// bind focus traversal policy
-		// bindFocusTraversalPolicyAsFXRootPartAdapter(adapterMapBinder);
+		adapterMapBinder.addBinding(AdapterKey.get(new TypeToken<ContentBehavior<Node>>() {
+		})).to(new TypeLiteral<ContentBehavior<Node>>() {
+		});
+
+		// observes selection model and generates feedback
+		adapterMapBinder.addBinding(AdapterKey.get(new TypeToken<SelectionBehavior<Node>>() {
+		})).to(new TypeLiteral<SelectionBehavior<Node>>() {
+		});
+
+		// clear selection and focus when clicked into background
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXFocusAndSelectOnClickPolicy.class);
+
 	}
-	
+
 	protected void bindFXDomainAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		// bind another FXViwer for the role of PALETTE_VIEWER_ROLE
 		adapterMapBinder.addBinding(AdapterKey.role(PALETTE_VIEWER_ROLE)).to(FXViewer.class);
 	}
 
-	protected void bindSelectionFeedbackFactoryAsPaletteViewerAdapter(
-			MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		adapterMapBinder.addBinding(AdapterKey.role(SelectionBehavior.SELECTION_FEEDBACK_PART_FACTORY))
-				.to(FXDefaultSelectionFeedbackPartFactory.class);
-	}
-
-	protected void bindSelectionHandleFactoryAsPaletteViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		adapterMapBinder.addBinding(AdapterKey.role(SelectionBehavior.SELECTION_HANDLE_PART_FACTORY))
-				.to(FXDefaultSelectionHandlePartFactory.class);
-	}
 }

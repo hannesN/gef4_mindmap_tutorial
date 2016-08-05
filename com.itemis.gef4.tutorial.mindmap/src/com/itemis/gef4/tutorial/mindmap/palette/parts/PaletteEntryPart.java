@@ -7,15 +7,15 @@ import org.eclipse.gef4.common.collections.CollectionUtils;
 import org.eclipse.gef4.mvc.fx.parts.AbstractFXContentPart;
 
 import com.google.common.collect.SetMultimap;
-import com.itemis.gef4.tutorial.mindmap.palette.model.PaletteEntry;
+import com.itemis.gef4.tutorial.mindmap.palette.model.PaletteNodeEntry;
 
 import javafx.scene.Group;
 
 public class PaletteEntryPart extends AbstractFXContentPart<Group>{
 
 	@Override
-	public PaletteEntry getContent() {
-		return (PaletteEntry) super.getContent();
+	public PaletteNodeEntry getContent() {
+		return (PaletteNodeEntry) super.getContent();
 	}
 	
 	@Override

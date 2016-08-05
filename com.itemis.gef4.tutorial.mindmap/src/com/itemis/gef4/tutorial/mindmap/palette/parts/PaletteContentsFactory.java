@@ -8,7 +8,7 @@ import org.eclipse.gef4.mvc.parts.IContentPartFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.itemis.gef4.tutorial.mindmap.palette.model.PaletteEntry;
+import com.itemis.gef4.tutorial.mindmap.palette.model.PaletteNodeEntry;
 import com.itemis.gef4.tutorial.mindmap.palette.model.PaletteModel;
 
 import javafx.scene.Node;
@@ -27,7 +27,7 @@ public class PaletteContentsFactory implements IContentPartFactory<Node> {
 		
 		if (content instanceof PaletteModel) {
 			return injector.getInstance(PaletteModelPart.class);
-		} else if (content instanceof PaletteEntry) {
+		} else if (content instanceof PaletteNodeEntry) {
 			return injector.getInstance(PaletteEntryPart.class);
 		} else {
 			throw new IllegalArgumentException("Uknwon content type <"+content.getClass().getName()+">");

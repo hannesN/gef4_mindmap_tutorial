@@ -24,6 +24,8 @@ import javafx.scene.Node;
  */
 public class MindMapNodeAnchorProvider extends IAdaptable.Bound.Impl<IVisualPart<Node, ? extends Node>> implements Provider<IAnchor> {
 
+	public static final String ANCHOR_GEOMETRY_PROVIDER = "ANCHOR_GEOMETRY_PROVIDER";
+	
 	private IVisualPart<Node, ? extends Node> host;
 	private DynamicAnchor anchor;
 	
@@ -39,15 +41,10 @@ public class MindMapNodeAnchorProvider extends IAdaptable.Bound.Impl<IVisualPart
 					bind(anchorage.layoutBoundsProperty());
 				}
 				
+				@SuppressWarnings("serial")
 				@Override
 				protected IGeometry computeValue() {
-					@SuppressWarnings("serial")
-					Map<AdapterKey<?extends Provider<IGeometry>>, Provider<IGeometry>> geomProviders = host.getAdapters(new TypeToken<Provider<IGeometry>>() {});
-					
-					if (geomProviders.isEmpty()) {
-						throw new IllegalStateException("No geometry providers found for "+host.getClass());
-					}
-					return geomProviders.values().iterator().next().get();
+					return host.getAdapter(AdapterKey.get(new TypeToken<Provider<IGeometry>>() {}, ANCHOR_GEOMETRY_PROVIDER)).get();
 				}
 			});
 		}
