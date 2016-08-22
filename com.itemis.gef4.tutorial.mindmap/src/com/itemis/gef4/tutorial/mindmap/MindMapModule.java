@@ -30,6 +30,7 @@ import com.google.inject.Binder;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
+import com.itemis.gef4.tutorial.mindmap.model.ConnectionCreationModel;
 import com.itemis.gef4.tutorial.mindmap.model.EditModel;
 import com.itemis.gef4.tutorial.mindmap.palette.parts.PaletteContentsFactory;
 import com.itemis.gef4.tutorial.mindmap.palette.parts.PaletteEntryPart;
@@ -127,7 +128,13 @@ public class MindMapModule extends MvcFxModule {
 	protected void bindContentViewerRootPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		super.bindContentViewerRootPartAdapters(adapterMapBinder);
 
+		// the model to store direct editing states
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(EditModel.class);
+		
+		// the model to store the temporary data for creating a new connection
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(ConnectionCreationModel.class);
+		
+		// the policy which creates a new node
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(CreateNodeOnClickPolicy.class);
 	}
 	
