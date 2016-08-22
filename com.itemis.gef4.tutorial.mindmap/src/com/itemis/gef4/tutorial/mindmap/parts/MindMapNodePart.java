@@ -10,14 +10,17 @@ import org.eclipse.gef4.mvc.fx.policies.FXTransformPolicy;
 import org.eclipse.gef4.mvc.parts.ITransformableContentPart;
 
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.SetMultimap;
 import com.itemis.gef4.tutorial.mindmap.model.MindMapNode;
 import com.itemis.gef4.tutorial.mindmap.visuals.MindMapNodeVisual;
 
 import javafx.scene.Node;
+import javafx.scene.control.TextInputControl;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Affine;
 
-public class MindMapNodePart extends AbstractFXContentPart<MindMapNodeVisual> implements ITransformableContentPart<Node, MindMapNodeVisual>{
+public class MindMapNodePart extends AbstractFXContentPart<MindMapNodeVisual> implements ITransformableContentPart<Node, MindMapNodeVisual>, IDirectEditablePart {
 
 	@Override
 	public MindMapNode getContent() {
@@ -64,6 +67,47 @@ public class MindMapNodePart extends AbstractFXContentPart<MindMapNodeVisual> im
 		getContent().setBounds(bounds);
 	}
 
-	
+	@Override
+	public List<Node> getEditableEntries() {
+		MindMapNodeVisual visual = getVisual();
+		return Lists.newArrayList(visual.getTitleText(), visual.getDescriptionText());
+	}
+
+	@Override
+	public Node startEditing(Node entry) {
+		return getVisual().startEditing(entry);
+	}
+
+	@Override
+	public void cancelEditing(Node entry) {
+		getVisual().endEditing(entry);		
+	}
+
+	@Override
+	public void submitEditing(Node entry, Object newValue) {
+		if (newValue instanceof String) {
+			String contentValue = (String) newValue;
+			if (entry==getVisual().getTitleText()) {
+				getContent().setTite(contentValue);
+			} else if (entry == getVisual().getDescriptionText()) {
+				getContent().setDescription(contentValue);
+			} else {
+				throw new IllegalArgumentException("Invalid entry");
+			}
+		}
+		doRefreshVisual(getVisual());
+		getVisual().endEditing(entry);
+		
+	}
+
+	@Override
+	public Object getEntryValue(Node entry) {
+		if (entry instanceof Text) {
+			return ((Text) entry).getText();
+		} else if (entry instanceof TextInputControl) {
+			return ((TextInputControl) entry).getText();
+		}
+		throw new IllegalArgumentException("Only Text ot TextInputControls nodes are allowed");
+	}
 	
 }

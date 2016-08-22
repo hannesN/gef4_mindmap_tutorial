@@ -17,7 +17,7 @@ import org.eclipse.gef4.mvc.viewer.IViewer;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.reflect.TypeToken;
-import com.itemis.gef4.tutorial.mindmap.MindMapPaletteModuleExtension;
+import com.itemis.gef4.tutorial.mindmap.MindMapModule;
 import com.itemis.gef4.tutorial.mindmap.model.MindMapNode;
 import com.itemis.gef4.tutorial.mindmap.palette.parts.PaletteEntryPart;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapNodePart;
@@ -27,13 +27,20 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 
-// XXX only applicable for root part @see getHost()
+/**
+ * This policy create a new node at the click event.
+ * 
+ * @author hniederhausen
+ *
+ */
 public class CreateNodeOnClickPolicy extends AbstractInteractionPolicy<Node> implements IFXOnClickPolicy {
 
+	@SuppressWarnings("serial")
 	@Override
 	public void click(MouseEvent e) {
 		FXViewer viewer = getHost().getRoot().getViewer().getDomain()
-				.getAdapter(AdapterKey.get(FXViewer.class, MindMapPaletteModuleExtension.PALETTE_VIEWER_ROLE));
+				.getAdapter(AdapterKey.get(FXViewer.class, MindMapModule.PALETTE_VIEWER_ROLE));
+		
 		SelectionModel<Node> selectionModel = viewer.getAdapter(new TypeToken<SelectionModel<Node>>() {
 		});
 
@@ -47,8 +54,6 @@ public class CreateNodeOnClickPolicy extends AbstractInteractionPolicy<Node> imp
 		if (part instanceof PaletteEntryPart) {
 			palEntryPart = (PaletteEntryPart) part;
 		}
-
-		// TODO more checks
 
 		// find model part
 		IRootPart<Node, ? extends Node> contentRoot = getContentViewer().getRootPart();
@@ -71,10 +76,12 @@ public class CreateNodeOnClickPolicy extends AbstractInteractionPolicy<Node> imp
 		
 		MindMapNodePart createdPart = (MindMapNodePart) creationPolicy.create(copy, (MindMapPart) modelPart,
 				HashMultimap.<IContentPart<Node, ? extends Node>, String>create());
-		commit(creationPolicy);
 		
-		selectionModel.clearSelection();
-
+		if (createdPart!=null) {
+			commit(creationPolicy);
+		
+			selectionModel.clearSelection();
+		}
 	}
 
 	protected FXViewer getContentViewer() {

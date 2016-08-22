@@ -1,7 +1,5 @@
 package com.itemis.gef4.tutorial.mindmap.parts;
 
-import java.util.Map;
-
 import org.eclipse.gef4.common.adapt.AdapterKey;
 import org.eclipse.gef4.common.adapt.IAdaptable;
 import org.eclipse.gef4.fx.anchors.DynamicAnchor;

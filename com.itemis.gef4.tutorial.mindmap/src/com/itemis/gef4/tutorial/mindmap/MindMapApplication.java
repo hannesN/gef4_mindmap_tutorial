@@ -73,7 +73,7 @@ public class MindMapApplication extends Application {
 	}
 
 	protected FXViewer getPaletteViewer() {
-		FXViewer viewer = domain.getAdapter(AdapterKey.get(FXViewer.class, MindMapPaletteModuleExtension.PALETTE_VIEWER_ROLE));
+		FXViewer viewer = domain.getAdapter(AdapterKey.get(FXViewer.class, MindMapModule.PALETTE_VIEWER_ROLE));
 		return viewer;
 	}
 
