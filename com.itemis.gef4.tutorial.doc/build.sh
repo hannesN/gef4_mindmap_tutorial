@@ -2,4 +2,4 @@ if [ ! -d "bin" ]; then
 mkdir bin
 fi
 
-pandoc src/*.mmd -f markdown -o bin/minmap_tutorial.pdf
+pandoc src/*.md -f markdown -o bin/minmap_tutorial.pdf
