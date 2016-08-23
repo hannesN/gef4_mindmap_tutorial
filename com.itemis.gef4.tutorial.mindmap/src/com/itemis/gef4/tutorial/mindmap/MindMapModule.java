@@ -22,9 +22,11 @@ import org.eclipse.gef.mvc.parts.IContentPartFactory;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
 import com.itemis.gef4.tutorial.mindmap.models.InlineEditModel;
+import com.itemis.gef4.tutorial.mindmap.models.ItemCreationModel;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapContentsFactory;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapNodeAnchorProvider;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapNodePart;
+import com.itemis.gef4.tutorial.mindmap.policies.CreateItemOnClickPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.InlineEditPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.MindMapNodeResizePolicy;
 
@@ -47,7 +49,8 @@ public class MindMapModule extends MvcFxModule {
 	protected void configure() {
 		super.configure();
 
-		bindInlineEditModel();
+		// binding our self makde models to the scope of FXViewer
+		bindModels();
 		
 		bindMindMapNodePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), MindMapNodePart.class));
 
@@ -115,9 +118,18 @@ public class MindMapModule extends MvcFxModule {
 	}
 	
 	@Override
+	protected void bindContentViewerRootPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		super.bindContentViewerRootPartAdapters(adapterMapBinder);
+		
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(CreateItemOnClickPolicy.class);
+		
+	}
+	
+	@Override
 	protected void bindContentViewerAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		super.bindContentViewerAdapters(adapterMapBinder);
 		bindInlineEditModelAsContentViewerAdapter(adapterMapBinder);
+		bindItemCreationEditModelAsContentViewerAdapter(adapterMapBinder);
 	}
 
 	protected void bindInlineEditModelAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
@@ -125,7 +137,13 @@ public class MindMapModule extends MvcFxModule {
 		adapterMapBinder.addBinding(key).to(InlineEditModel.class);
 	}
 
-	protected void bindInlineEditModel() {
+	protected void bindItemCreationEditModelAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		AdapterKey<ItemCreationModel> key = AdapterKey.get(ItemCreationModel.class);
+		adapterMapBinder.addBinding(key).to(ItemCreationModel.class);
+	}
+	
+	protected void bindModels() {
 		binder().bind(InlineEditModel.class).in(AdaptableScopes.typed(FXViewer.class));
+		binder().bind(ItemCreationModel.class).in(AdaptableScopes.typed(FXViewer.class));
 	}
 }

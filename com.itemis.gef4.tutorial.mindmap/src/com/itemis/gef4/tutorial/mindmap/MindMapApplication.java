@@ -1,7 +1,6 @@
 package com.itemis.gef4.tutorial.mindmap;
 
-import org.eclipse.gef.common.adapt.AdapterKey; 
-import org.eclipse.gef.fx.nodes.InfiniteCanvas;
+import org.eclipse.gef.common.adapt.AdapterKey;
 import org.eclipse.gef.mvc.fx.domain.FXDomain;
 import org.eclipse.gef.mvc.fx.viewer.FXViewer;
 import org.eclipse.gef.mvc.models.ContentModel;
@@ -9,9 +8,18 @@ import org.eclipse.gef.mvc.models.ContentModel;
 import com.google.inject.Guice;
 import com.itemis.gef4.tutorial.mindmap.model.MindMap;
 import com.itemis.gef4.tutorial.mindmap.model.MindMapFactory;
+import com.itemis.gef4.tutorial.mindmap.models.ItemCreationModel;
+import com.itemis.gef4.tutorial.mindmap.models.ItemCreationModel.Type;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -70,10 +78,41 @@ public class MindMapApplication extends Application {
 	}
 
 	private void hookViewers() {
-		// TODO Auto-generated method stub
-		InfiniteCanvas canvas = getContentViewer().getCanvas();
 		
-		primaryStage.setScene(new Scene(canvas));
+		BorderPane pane = new BorderPane(getContentViewer().getCanvas());
+		pane.setLeft(createPaletteNode());
+
+		pane.setPrefSize(800, 600);
+		
+		Scene scene = new Scene(pane);
+		primaryStage.setScene(scene);
+	}
+
+	private Node createPaletteNode() {
+		
+		// the toggleGroup makes sure, we only select one 
+		ToggleGroup toggleGroup = new ToggleGroup();
+		
+		ToggleButton addNodeButton = new ToggleButton("New Node");
+		addNodeButton.setToggleGroup(toggleGroup);
+		addNodeButton.setPrefHeight(80);
+		
+		addNodeButton.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				ItemCreationModel model = getContentViewer().getAdapter(ItemCreationModel.class);
+				if (newValue) {
+					model.setPressedButton(addNodeButton);
+					model.setType(Type.Node);
+				} else {
+					model.clearSettings();
+				}
+			}
+			
+		});
+		
+		return new VBox(addNodeButton);
 	}
 
 	public static void main(String[] args) {

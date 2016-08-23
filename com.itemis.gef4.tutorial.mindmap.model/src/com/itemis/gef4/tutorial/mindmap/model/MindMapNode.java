@@ -38,7 +38,7 @@ public class MindMapNode extends AbstractMindMapModel implements Serializable {
 	private String description;
 
 	/**
-	 * The background color of hte node
+	 * The background color of the node
 	 */
 	private Color color;
 	
