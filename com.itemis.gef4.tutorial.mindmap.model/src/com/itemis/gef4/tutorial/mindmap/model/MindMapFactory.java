@@ -6,6 +6,20 @@ import javafx.scene.paint.Color;
 
 public class MindMapFactory {
 
+	public MindMap createSingleNodeExample() {
+		MindMap mindMap = new MindMap();
+		
+		MindMapNode center = new MindMapNode();
+		center.setTite("The Core Idea");
+		center.setDescription("This is my Core idea. I need a larger Explanation to it, so I can test the warpping.");
+		center.setColor(Color.GREENYELLOW);
+		center.setBounds(new Rectangle(20,  50, 100, 100));
+		
+		mindMap.addNode(center);
+		
+		return mindMap;
+	}
+	
 	public MindMap createExample() {
 		MindMap mindMap = new MindMap();
 		

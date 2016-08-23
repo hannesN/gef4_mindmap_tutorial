@@ -15,10 +15,6 @@ import javafx.scene.Node;
 
 public class MindMapNodeResizePolicy extends FXResizePolicy {
 
-	public MindMapNodeResizePolicy() {
-		System.out.println("Constructing MindMapNodeResizePolicy");
-	}
-	
 	@Override
 	protected Node getVisualToResize() {
 		System.out.println("Get Visual");

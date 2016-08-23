@@ -56,7 +56,7 @@ public class MindMapApplication extends Application {
 	private void populateViewerContents() {
 		MindMapFactory fac = new MindMapFactory();
 		
-		MindMap map = fac.createExample();
+		MindMap map = fac.createSingleNodeExample();
 		
 		FXViewer viewer = getContentViewer();
 		

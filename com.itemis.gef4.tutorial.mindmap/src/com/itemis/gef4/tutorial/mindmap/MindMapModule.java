@@ -2,6 +2,7 @@ package com.itemis.gef4.tutorial.mindmap;
 
 
 import org.eclipse.gef.common.adapt.AdapterKey;
+import org.eclipse.gef.common.adapt.inject.AdaptableScopes;
 import org.eclipse.gef.common.adapt.inject.AdapterMaps;
 import org.eclipse.gef.mvc.fx.MvcFxModule;
 import org.eclipse.gef.mvc.fx.parts.FXDefaultHoverFeedbackPartFactory;
@@ -15,13 +16,16 @@ import org.eclipse.gef.mvc.fx.policies.FXTransformPolicy;
 import org.eclipse.gef.mvc.fx.policies.FXTranslateSelectedOnDragPolicy;
 import org.eclipse.gef.mvc.fx.providers.ShapeBoundsProvider;
 import org.eclipse.gef.mvc.fx.providers.ShapeOutlineProvider;
+import org.eclipse.gef.mvc.fx.viewer.FXViewer;
 import org.eclipse.gef.mvc.parts.IContentPartFactory;
 
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
+import com.itemis.gef4.tutorial.mindmap.models.InlineEditModel;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapContentsFactory;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapNodeAnchorProvider;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapNodePart;
+import com.itemis.gef4.tutorial.mindmap.policies.InlineEditPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.MindMapNodeResizePolicy;
 
 import javafx.scene.Node;
@@ -43,13 +47,15 @@ public class MindMapModule extends MvcFxModule {
 	protected void configure() {
 		super.configure();
 
+		bindInlineEditModel();
+		
 		bindMindMapNodePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), MindMapNodePart.class));
 
 		// with this binding we create the handles
 		bindFXSquareSegmentHandlePartPartAdapter(
 				AdapterMaps.getAdapterMapBinder(binder(), FXSquareSegmentHandlePart.class));
 	}
-
+	
 	@Override
 	protected void bindIContentPartFactoryAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		super.bindIContentPartFactoryAsContentViewerAdapter(adapterMapBinder);
@@ -96,6 +102,9 @@ public class MindMapModule extends MvcFxModule {
 		// handles
 		role = AdapterKey.role(FXDefaultSelectionHandlePartFactory.SELECTION_HANDLES_GEOMETRY_PROVIDER);
 		adapterMapBinder.addBinding(role).to(ShapeOutlineProvider.class);
+		
+		// adding the inline edit policy to the part to listen to double clicks on "fields"
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(InlineEditPolicy.class);
 
 	}
 
@@ -103,5 +112,20 @@ public class MindMapModule extends MvcFxModule {
 
 		adapterMapBinder.addBinding(AdapterKey.defaultRole())
 				.to(FXResizeTranslateFirstAnchorageOnHandleDragPolicy.class);
+	}
+	
+	@Override
+	protected void bindContentViewerAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		super.bindContentViewerAdapters(adapterMapBinder);
+		bindInlineEditModelAsContentViewerAdapter(adapterMapBinder);
+	}
+
+	protected void bindInlineEditModelAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		AdapterKey<InlineEditModel> key = AdapterKey.get(InlineEditModel.class);
+		adapterMapBinder.addBinding(key).to(InlineEditModel.class);
+	}
+
+	protected void bindInlineEditModel() {
+		binder().bind(InlineEditModel.class).in(AdaptableScopes.typed(FXViewer.class));
 	}
 }
