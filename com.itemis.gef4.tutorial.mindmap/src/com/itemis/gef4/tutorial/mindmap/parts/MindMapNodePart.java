@@ -3,13 +3,13 @@ package com.itemis.gef4.tutorial.mindmap.parts;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.gef4.geometry.planar.AffineTransform;
-import org.eclipse.gef4.geometry.planar.Dimension;
-import org.eclipse.gef4.geometry.planar.Rectangle;
-import org.eclipse.gef4.mvc.fx.parts.AbstractFXContentPart;
-import org.eclipse.gef4.mvc.fx.policies.FXTransformPolicy;
-import org.eclipse.gef4.mvc.parts.IResizableContentPart;
-import org.eclipse.gef4.mvc.parts.ITransformableContentPart;
+import org.eclipse.gef.geometry.planar.AffineTransform;
+import org.eclipse.gef.geometry.planar.Dimension;
+import org.eclipse.gef.geometry.planar.Rectangle;
+import org.eclipse.gef.mvc.fx.parts.AbstractFXContentPart;
+import org.eclipse.gef.mvc.fx.policies.FXTransformPolicy;
+import org.eclipse.gef.mvc.parts.IResizableContentPart;
+import org.eclipse.gef.mvc.parts.ITransformableContentPart;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;

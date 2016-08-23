@@ -2,7 +2,7 @@ package com.itemis.gef4.tutorial.mindmap.model;
 
 import java.util.List;
 
-import org.eclipse.gef4.geometry.planar.Point;
+import org.eclipse.gef.geometry.planar.Point;
 
 import com.google.common.collect.Lists;
 

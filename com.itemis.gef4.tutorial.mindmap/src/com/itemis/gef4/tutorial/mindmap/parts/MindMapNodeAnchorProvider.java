@@ -1,11 +1,11 @@
 package com.itemis.gef4.tutorial.mindmap.parts;
 
-import org.eclipse.gef4.common.adapt.IAdaptable;
-import org.eclipse.gef4.fx.anchors.DynamicAnchor;
-import org.eclipse.gef4.fx.anchors.DynamicAnchor.AnchorageReferenceGeometry;
-import org.eclipse.gef4.fx.anchors.IAnchor;
-import org.eclipse.gef4.geometry.planar.IGeometry;
-import org.eclipse.gef4.mvc.parts.IVisualPart;
+import org.eclipse.gef.common.adapt.IAdaptable;
+import org.eclipse.gef.fx.anchors.DynamicAnchor;
+import org.eclipse.gef.fx.anchors.DynamicAnchor.AnchorageReferenceGeometry;
+import org.eclipse.gef.fx.anchors.IAnchor;
+import org.eclipse.gef.geometry.planar.IGeometry;
+import org.eclipse.gef.mvc.parts.IVisualPart;
 
 import com.google.common.reflect.TypeToken;
 import com.google.inject.Provider;

@@ -1,0 +1,1 @@
+- Wenn Kanten unter Knoten, dann muss bei add children kanten zuerst

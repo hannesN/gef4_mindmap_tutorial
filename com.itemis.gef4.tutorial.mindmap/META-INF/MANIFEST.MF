@@ -5,11 +5,11 @@ Bundle-SymbolicName: com.itemis.gef4.tutorial.mindmap
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: ITEMIS
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Require-Bundle: org.eclipse.gef4.common;bundle-version="1.0.0",
- org.eclipse.gef4.fx;bundle-version="1.0.0",
- org.eclipse.gef4.geometry;bundle-version="1.0.0",
- org.eclipse.gef4.mvc;bundle-version="1.0.0",
- org.eclipse.gef4.mvc.fx;bundle-version="1.0.0",
+Require-Bundle: org.eclipse.gef.common;bundle-version="1.0.0",
+ org.eclipse.gef.fx;bundle-version="1.0.0",
+ org.eclipse.gef.geometry;bundle-version="1.0.0",
+ org.eclipse.gef.mvc;bundle-version="1.0.0",
+ org.eclipse.gef.mvc.fx;bundle-version="1.0.0",
  com.itemis.gef4.tutorial.mindmap.model;bundle-version="1.0.0",
  com.itemis.gef4.tutorial.mindmap.visuals;bundle-version="1.0.0",
  org.eclipse.core.commands;bundle-version="3.8.0",

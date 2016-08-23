@@ -1,8 +1,8 @@
 package com.itemis.gef4.tutorial.mindmap.visuals;
 
-import org.eclipse.gef4.fx.anchors.ChopBoxStrategy;
-import org.eclipse.gef4.fx.anchors.DynamicAnchor;
-import org.eclipse.gef4.fx.nodes.Connection;
+import org.eclipse.gef.fx.anchors.ChopBoxStrategy;
+import org.eclipse.gef.fx.anchors.DynamicAnchor;
+import org.eclipse.gef.fx.nodes.Connection;
 
 import javafx.application.Application;
 import javafx.scene.Scene;

@@ -1,6 +1,6 @@
 package com.itemis.gef4.tutorial.mindmap.visuals;
 
-import org.eclipse.gef4.fx.nodes.Connection;
+import org.eclipse.gef.fx.nodes.Connection;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;

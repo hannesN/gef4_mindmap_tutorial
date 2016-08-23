@@ -1,10 +1,10 @@
 package com.itemis.gef4.tutorial.mindmap;
 
-import org.eclipse.gef4.common.adapt.AdapterKey;
-import org.eclipse.gef4.fx.nodes.InfiniteCanvas;
-import org.eclipse.gef4.mvc.fx.domain.FXDomain;
-import org.eclipse.gef4.mvc.fx.viewer.FXViewer;
-import org.eclipse.gef4.mvc.models.ContentModel;
+import org.eclipse.gef.common.adapt.AdapterKey; 
+import org.eclipse.gef.fx.nodes.InfiniteCanvas;
+import org.eclipse.gef.mvc.fx.domain.FXDomain;
+import org.eclipse.gef.mvc.fx.viewer.FXViewer;
+import org.eclipse.gef.mvc.models.ContentModel;
 
 import com.google.inject.Guice;
 import com.itemis.gef4.tutorial.mindmap.model.MindMap;

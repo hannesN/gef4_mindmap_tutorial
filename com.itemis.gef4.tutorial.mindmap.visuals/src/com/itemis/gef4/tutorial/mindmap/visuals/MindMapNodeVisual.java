@@ -1,6 +1,6 @@
 package com.itemis.gef4.tutorial.mindmap.visuals;
-import org.eclipse.gef4.fx.nodes.GeometryNode;
-import org.eclipse.gef4.geometry.planar.RoundedRectangle;
+import org.eclipse.gef.fx.nodes.GeometryNode;
+import org.eclipse.gef.geometry.planar.RoundedRectangle;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

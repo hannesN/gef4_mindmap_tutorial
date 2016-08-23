@@ -1,9 +1,9 @@
 package com.itemis.gef4.tutorial.mindmap.policies;
 
-import org.eclipse.gef4.geometry.planar.Rectangle;
-import org.eclipse.gef4.mvc.fx.policies.FXResizePolicy;
-import org.eclipse.gef4.mvc.operations.ForwardUndoCompositeOperation;
-import org.eclipse.gef4.mvc.operations.ITransactionalOperation;
+import org.eclipse.gef.geometry.planar.Rectangle;
+import org.eclipse.gef.mvc.fx.policies.FXResizePolicy;
+import org.eclipse.gef.mvc.operations.ForwardUndoCompositeOperation;
+import org.eclipse.gef.mvc.operations.ITransactionalOperation;
 
 import com.itemis.gef4.tutorial.mindmap.model.MindMapNode;
 import com.itemis.gef4.tutorial.mindmap.operations.ResizeMindMapNodeOperation;

@@ -6,8 +6,8 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.gef4.geometry.planar.Rectangle;
-import org.eclipse.gef4.mvc.operations.ITransactionalOperation;
+import org.eclipse.gef.geometry.planar.Rectangle;
+import org.eclipse.gef.mvc.operations.ITransactionalOperation;
 
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapNodePart;
 
