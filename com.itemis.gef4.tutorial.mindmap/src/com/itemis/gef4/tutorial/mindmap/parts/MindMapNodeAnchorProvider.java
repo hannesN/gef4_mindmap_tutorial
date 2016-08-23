@@ -1,8 +1,5 @@
 package com.itemis.gef4.tutorial.mindmap.parts;
 
-import java.util.Map;
-
-import org.eclipse.gef4.common.adapt.AdapterKey;
 import org.eclipse.gef4.common.adapt.IAdaptable;
 import org.eclipse.gef4.fx.anchors.DynamicAnchor;
 import org.eclipse.gef4.fx.anchors.DynamicAnchor.AnchorageReferenceGeometry;
@@ -42,12 +39,10 @@ public class MindMapNodeAnchorProvider extends IAdaptable.Bound.Impl<IVisualPart
 				@Override
 				protected IGeometry computeValue() {
 					@SuppressWarnings("serial")
-					Map<AdapterKey<?extends Provider<IGeometry>>, Provider<IGeometry>> geomProviders = host.getAdapters(new TypeToken<Provider<IGeometry>>() {});
+					// get the registered geometry provider from the host
+					Provider<IGeometry> geomProvider = host.getAdapter(new TypeToken<Provider<IGeometry>>() {});
 					
-					if (geomProviders.isEmpty()) {
-						throw new IllegalStateException("No geometry providers found for "+host.getClass());
-					}
-					return geomProviders.values().iterator().next().get();
+					return geomProvider.get();
 				}
 			});
 		}

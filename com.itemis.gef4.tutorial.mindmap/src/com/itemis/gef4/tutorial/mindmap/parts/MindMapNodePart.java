@@ -4,9 +4,11 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.gef4.geometry.planar.AffineTransform;
+import org.eclipse.gef4.geometry.planar.Dimension;
 import org.eclipse.gef4.geometry.planar.Rectangle;
 import org.eclipse.gef4.mvc.fx.parts.AbstractFXContentPart;
 import org.eclipse.gef4.mvc.fx.policies.FXTransformPolicy;
+import org.eclipse.gef4.mvc.parts.IResizableContentPart;
 import org.eclipse.gef4.mvc.parts.ITransformableContentPart;
 
 import com.google.common.collect.HashMultimap;
@@ -17,7 +19,7 @@ import com.itemis.gef4.tutorial.mindmap.visuals.MindMapNodeVisual;
 import javafx.scene.Node;
 import javafx.scene.transform.Affine;
 
-public class MindMapNodePart extends AbstractFXContentPart<MindMapNodeVisual> implements ITransformableContentPart<Node, MindMapNodeVisual>{
+public class MindMapNodePart extends AbstractFXContentPart<MindMapNodeVisual> implements ITransformableContentPart<Node, MindMapNodeVisual> , IResizableContentPart<Node, MindMapNodeVisual>{
 
 	@Override
 	public MindMapNode getContent() {
@@ -57,6 +59,7 @@ public class MindMapNodePart extends AbstractFXContentPart<MindMapNodeVisual> im
 		visual.getShape().resize(rec.getWidth(), rec.getHeight());
 	}
 	
+	
 	@Override
 	public void transformContent(AffineTransform transform) {
 		Rectangle bounds = getContent().getBounds();
@@ -64,6 +67,9 @@ public class MindMapNodePart extends AbstractFXContentPart<MindMapNodeVisual> im
 		getContent().setBounds(bounds);
 	}
 
-	
-	
+
+	@Override
+	public void resizeContent(Dimension size) {
+		getContent().getBounds().setSize(size);		
+	}
 }

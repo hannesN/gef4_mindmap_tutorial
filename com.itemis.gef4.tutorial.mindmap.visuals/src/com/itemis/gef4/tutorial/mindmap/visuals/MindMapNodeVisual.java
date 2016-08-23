@@ -94,7 +94,14 @@ public class MindMapNodeVisual extends Group {
 
 	public void setDescription(String description) {
 		this.description.setText(description);
-		
 	}
 
+	public double getMinimumHeight() {
+		return Math.max(description.getBoundsInLocal().getHeight(), title.getBoundsInLocal().getHeight());
+	}
+	
+	public double getMinimumWidth() {
+		return Math.max(description.getBoundsInLocal().getWidth(), title.getBoundsInLocal().getWidth());
+	}
+	
 }
