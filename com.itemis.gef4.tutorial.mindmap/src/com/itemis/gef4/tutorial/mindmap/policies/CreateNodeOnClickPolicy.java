@@ -21,7 +21,7 @@ import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
-public class CreateItemOnClickPolicy extends AbstractInteractionPolicy<Node> implements IFXOnClickPolicy {
+public class CreateNodeOnClickPolicy extends AbstractInteractionPolicy<Node> implements IFXOnClickPolicy {
 
 	@Override
 	public void click(MouseEvent e) {
