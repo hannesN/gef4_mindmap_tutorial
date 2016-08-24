@@ -86,7 +86,6 @@ public class MindMapNodeVisual extends Group {
 				double val = (double) newValue;
 				stackPane.setPrefWidth(val);
 				descriptionFlow.setMaxWidth(val);
-				System.out.println("Shape-Width:"+val);
 			}
 		});
 	}
@@ -96,7 +95,6 @@ public class MindMapNodeVisual extends Group {
 	}
 	
 	public void resizeShape(double width, double height) {
-		System.out.println("Resizing to "+width);
 		descriptionText.setWrappingWidth(width-30);
 		shape.resize(width, height);
 	}
