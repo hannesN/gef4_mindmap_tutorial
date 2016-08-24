@@ -4,6 +4,7 @@ package com.itemis.gef4.tutorial.mindmap;
 import org.eclipse.gef.common.adapt.AdapterKey;
 import org.eclipse.gef.common.adapt.inject.AdaptableScopes;
 import org.eclipse.gef.common.adapt.inject.AdapterMaps;
+import org.eclipse.gef.mvc.behaviors.HoverBehavior;
 import org.eclipse.gef.mvc.fx.MvcFxModule;
 import org.eclipse.gef.mvc.fx.parts.FXDefaultHoverFeedbackPartFactory;
 import org.eclipse.gef.mvc.fx.parts.FXDefaultSelectionFeedbackPartFactory;
@@ -26,6 +27,7 @@ import com.itemis.gef4.tutorial.mindmap.models.ItemCreationModel;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapContentsFactory;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapNodeAnchorProvider;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapNodePart;
+import com.itemis.gef4.tutorial.mindmap.parts.handles.MindMapHoverHandleFactory;
 import com.itemis.gef4.tutorial.mindmap.policies.CreateConnectionOnClickPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.CreateNodeOnClickPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.InlineEditPolicy;
@@ -82,7 +84,7 @@ public class MindMapModule extends MvcFxModule {
 
 	protected void bindMindMapNodePartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 
-		// provides a hover feedback to the shape, on mouse over. We need at least one of such a provider
+		// provides a hover feedback to the shape, on mouse over.
 		AdapterKey<?> role = AdapterKey.role(FXDefaultHoverFeedbackPartFactory.HOVER_FEEDBACK_GEOMETRY_PROVIDER);
 		adapterMapBinder.addBinding(role).to(ShapeBoundsProvider.class);
 
@@ -144,6 +146,14 @@ public class MindMapModule extends MvcFxModule {
 	protected void bindItemCreationEditModelAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		AdapterKey<ItemCreationModel> key = AdapterKey.get(ItemCreationModel.class);
 		adapterMapBinder.addBinding(key).to(ItemCreationModel.class);
+	}
+	
+	@Override
+	protected void bindHoverHandlePartFactoryAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		super.bindHoverHandlePartFactoryAsContentViewerAdapter(adapterMapBinder);
+		
+		// adding our handle factory
+		adapterMapBinder.addBinding(AdapterKey.role(HoverBehavior.HOVER_HANDLE_PART_FACTORY)).to(MindMapHoverHandleFactory.class);
 	}
 	
 	protected void bindModels() {
