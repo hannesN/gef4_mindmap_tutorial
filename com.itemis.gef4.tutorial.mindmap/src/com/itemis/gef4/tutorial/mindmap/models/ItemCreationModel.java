@@ -17,7 +17,7 @@ public class ItemCreationModel {
 	/**
 	 * The kind of item to create
 	 */
-	private Type type;
+	private Type type = Type.None;
 	
 	/**
 	 * The button, which configured the current state
