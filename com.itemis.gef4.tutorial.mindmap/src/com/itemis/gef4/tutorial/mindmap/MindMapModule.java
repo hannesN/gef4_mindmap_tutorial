@@ -6,6 +6,7 @@ import org.eclipse.gef.common.adapt.inject.AdaptableScopes;
 import org.eclipse.gef.common.adapt.inject.AdapterMaps;
 import org.eclipse.gef.mvc.behaviors.HoverBehavior;
 import org.eclipse.gef.mvc.fx.MvcFxModule;
+import org.eclipse.gef.mvc.fx.behaviors.FXHoverBehavior;
 import org.eclipse.gef.mvc.fx.parts.FXDefaultHoverFeedbackPartFactory;
 import org.eclipse.gef.mvc.fx.parts.FXDefaultSelectionFeedbackPartFactory;
 import org.eclipse.gef.mvc.fx.parts.FXDefaultSelectionHandlePartFactory;
@@ -84,12 +85,16 @@ public class MindMapModule extends MvcFxModule {
 
 	protected void bindMindMapNodePartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 
+//		// add behaviour to react on hover model changes
+//		// TODO check why it is explicitly needed here but not in the other examples
+//		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXHoverBehavior.class);
+		
 		// provides a hover feedback to the shape, on mouse over.
 		AdapterKey<?> role = AdapterKey.role(FXDefaultHoverFeedbackPartFactory.HOVER_FEEDBACK_GEOMETRY_PROVIDER);
-		adapterMapBinder.addBinding(role).to(ShapeBoundsProvider.class);
+		adapterMapBinder.addBinding(role).to(ShapeOutlineProvider.class);
 
 		role = AdapterKey.role(FXDefaultSelectionFeedbackPartFactory.SELECTION_FEEDBACK_GEOMETRY_PROVIDER);
-		adapterMapBinder.addBinding(role).to(ShapeOutlineProvider.class);
+		adapterMapBinder.addBinding(role).to(ShapeBoundsProvider.class);
 
 		// shape outline provider used in the anchor provider
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(ShapeOutlineProvider.class);
@@ -107,7 +112,7 @@ public class MindMapModule extends MvcFxModule {
 		// specify the factory to create the geometry object for the selection
 		// handles
 		role = AdapterKey.role(FXDefaultSelectionHandlePartFactory.SELECTION_HANDLES_GEOMETRY_PROVIDER);
-		adapterMapBinder.addBinding(role).to(ShapeOutlineProvider.class);
+		adapterMapBinder.addBinding(role).to(ShapeBoundsProvider.class);
 		
 		// adding the inline edit policy to the part to listen to double clicks on "fields"
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(InlineEditPolicy.class);
@@ -128,7 +133,9 @@ public class MindMapModule extends MvcFxModule {
 		super.bindContentViewerRootPartAdapters(adapterMapBinder);
 		
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(CreateNodeOnClickPolicy.class);
-		
+
+		// hover behavior
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXHoverBehavior.class);
 	}
 	
 	@Override
@@ -147,13 +154,17 @@ public class MindMapModule extends MvcFxModule {
 		AdapterKey<ItemCreationModel> key = AdapterKey.get(ItemCreationModel.class);
 		adapterMapBinder.addBinding(key).to(ItemCreationModel.class);
 	}
-	
+
 	@Override
 	protected void bindHoverHandlePartFactoryAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		super.bindHoverHandlePartFactoryAsContentViewerAdapter(adapterMapBinder);
-		
 		// adding our handle factory
 		adapterMapBinder.addBinding(AdapterKey.role(HoverBehavior.HOVER_HANDLE_PART_FACTORY)).to(MindMapHoverHandleFactory.class);
+	}
+
+	@Override
+	protected void bindHoverFeedbackPartFactoryAsContentViewerAdapter(
+			MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		super.bindHoverFeedbackPartFactoryAsContentViewerAdapter(adapterMapBinder);
 	}
 	
 	protected void bindModels() {
