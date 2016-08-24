@@ -17,20 +17,19 @@ public class MindMapNodeResizePolicy extends FXResizePolicy {
 
 	@Override
 	protected Node getVisualToResize() {
-		System.out.println("Get Visual");
 		return getHost().getVisual().getShape();
 	}
 	
 	@Override
 	protected double getMinimumHeight() {
 		MindMapNodeVisual mmv = getHost().getVisual();
-		return mmv.getMinimumHeight();
+		return Math.max(10, mmv.getMinimumHeight());
 	}
 	
 	@Override
 	protected double getMinimumWidth() {
 		MindMapNodeVisual mmv = getHost().getVisual();
-		return mmv.getMinimumWidth();
+		return Math.max(10, mmv.getMinimumWidth());
 	}
 	
 	@Override
