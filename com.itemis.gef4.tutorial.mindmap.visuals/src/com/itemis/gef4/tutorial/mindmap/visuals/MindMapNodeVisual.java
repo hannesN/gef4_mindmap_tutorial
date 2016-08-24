@@ -17,13 +17,17 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 public class MindMapNodeVisual extends Group {
 
+	protected static final int MIN_WIDTH = 100;
+	
 	protected static final double PADDING = 40;
 
 	private Text titleText;
 
+	private TextFlow descriptionFlow;
 	private Text descriptionText;
 
 	private GeometryNode<RoundedRectangle> shape;
@@ -48,41 +52,49 @@ public class MindMapNodeVisual extends Group {
 		titleText.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				calculateBoundsAndResize();
+//				calculateBoundsAndResize();
 			}
 		});
 
+		
+		
 		descriptionText = new Text();
 		descriptionText.setTextOrigin(VPos.TOP);
-		descriptionText.setWrappingWidth(100);
+//		descriptionText.setWrappingWidth(100);
 		// resize shape when the label changes
 		descriptionText.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				calculateBoundsAndResize();
+//				calculateBoundsAndResize();
 			}
 		});
 
-		labelGroup.getChildren().addAll(titleText, descriptionText);
+		descriptionFlow = new TextFlow(descriptionText);
+		descriptionFlow.setMaxWidth(150);
+		labelGroup.getChildren().addAll(titleText, descriptionFlow);
 
 		stackPane = new StackPane();
+		stackPane.setPrefWidth(150);
 		stackPane.getChildren().addAll(shape, labelGroup);
-
 		
 		getChildren().addAll(stackPane);
 		
+		shape.widthProperty().addListener(new ChangeListener<Number>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				double val = (double) newValue;
+				stackPane.setPrefWidth(val);
+				descriptionFlow.setMaxWidth(val);
+				System.out.println("Shape-Width:"+val);
+			}
+		});
 	}
 
 	public Node getShape() {
 		return shape;
 	}
 	
-	private void calculateBoundsAndResize() {
-		System.out.println("Calculate Bound Size"+labelGroup.getLayoutBounds().getWidth());
-		stackPane.resize(labelGroup.getLayoutBounds().getWidth() + PADDING,
-				labelGroup.getLayoutBounds().getHeight() + PADDING);
-	}
-
 	public void resizeShape(double width, double height) {
 		System.out.println("Resizing to "+width);
 		descriptionText.setWrappingWidth(width-30);
@@ -110,12 +122,11 @@ public class MindMapNodeVisual extends Group {
 	}
 
 	public double getMinimumHeight() {
-		return descriptionText.getBoundsInLocal().getHeight() + titleText.getBoundsInLocal().getHeight();
+		return 10;
 	}
 
 	public double getMinimumWidth() {
-		System.out.println("Mimimum Width: "+titleText.getBoundsInLocal().getWidth());
-		return titleText.getBoundsInLocal().getWidth();
+		return MIN_WIDTH;
 	}
 
 	public Node startEditing(Node readOnlyField) {
@@ -148,15 +159,18 @@ public class MindMapNodeVisual extends Group {
 
 	public void endEditing(Node readOnlyField) {
 		int idx = 0;
+		Node elementToAdd = null;
 		if (readOnlyField == titleText) {
+			elementToAdd = titleText;
 		} else if (readOnlyField == descriptionText) {
-			idx = 1;
+			elementToAdd = descriptionFlow;
+			idx=1;
 		} else {
 			throw new IllegalArgumentException("Invalid entry");
 		}
 
 		ObservableList<Node> children = labelGroup.getChildren();
 		children.remove(idx);
-		children.add(idx, readOnlyField);
+		children.add(idx, elementToAdd);
 	}
 }
