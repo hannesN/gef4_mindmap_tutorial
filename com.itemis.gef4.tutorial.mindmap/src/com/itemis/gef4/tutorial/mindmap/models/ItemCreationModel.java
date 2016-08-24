@@ -1,5 +1,7 @@
 package com.itemis.gef4.tutorial.mindmap.models;
 
+import org.eclipse.gef.mvc.parts.IContentPart;
+
 import javafx.scene.control.ToggleButton;
 
 /**
@@ -11,7 +13,8 @@ import javafx.scene.control.ToggleButton;
 public class ItemCreationModel {
 	public enum Type {
 		None,
-		Node
+		Node,
+		Connection
 	}
 
 	/**
@@ -23,6 +26,8 @@ public class ItemCreationModel {
 	 * The button, which configured the current state
 	 */
 	private ToggleButton pressedButton;
+	
+	private IContentPart<?, ?> source;
 	
 	public void setType(Type type) {
 		this.type = type;
@@ -41,9 +46,16 @@ public class ItemCreationModel {
 			pressedButton.setSelected(false);
 		}
 		pressedButton = null;
+		source = null;
 		type=Type.None;
 	}
 	
+	public void setSource(IContentPart<?, ?> source) {
+		this.source = source;
+	}
 	
+	public IContentPart<?, ?> getSource() {
+		return source;
+	}
 	
 }

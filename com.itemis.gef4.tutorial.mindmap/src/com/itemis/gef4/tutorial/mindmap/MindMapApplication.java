@@ -112,7 +112,25 @@ public class MindMapApplication extends Application {
 			
 		});
 		
-		return new VBox(addNodeButton);
+		ToggleButton addConnectionButton = new ToggleButton("New Connection");
+		addConnectionButton.setToggleGroup(toggleGroup);
+		addConnectionButton.setPrefHeight(80);
+		
+		addConnectionButton.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				ItemCreationModel model = getContentViewer().getAdapter(ItemCreationModel.class);
+				if (newValue) {
+					model.setPressedButton(addConnectionButton);
+					model.setType(Type.Connection);
+				} else {
+					model.clearSettings();
+				}
+			}
+		});
+		
+		return new VBox(addNodeButton, addConnectionButton);
 	}
 
 	public static void main(String[] args) {

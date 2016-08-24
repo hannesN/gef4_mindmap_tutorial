@@ -26,7 +26,8 @@ import com.itemis.gef4.tutorial.mindmap.models.ItemCreationModel;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapContentsFactory;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapNodeAnchorProvider;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapNodePart;
-import com.itemis.gef4.tutorial.mindmap.policies.CreateItemOnClickPolicy;
+import com.itemis.gef4.tutorial.mindmap.policies.CreateConnectionOnClickPolicy;
+import com.itemis.gef4.tutorial.mindmap.policies.CreateNodeOnClickPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.InlineEditPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.MindMapNodeResizePolicy;
 
@@ -108,6 +109,9 @@ public class MindMapModule extends MvcFxModule {
 		
 		// adding the inline edit policy to the part to listen to double clicks on "fields"
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(InlineEditPolicy.class);
+		
+		// adding the connection creation
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(CreateConnectionOnClickPolicy.class);
 
 	}
 
@@ -121,7 +125,7 @@ public class MindMapModule extends MvcFxModule {
 	protected void bindContentViewerRootPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		super.bindContentViewerRootPartAdapters(adapterMapBinder);
 		
-		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(CreateItemOnClickPolicy.class);
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(CreateNodeOnClickPolicy.class);
 		
 	}
 	

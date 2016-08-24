@@ -1,6 +1,5 @@
 package com.itemis.gef4.tutorial.mindmap.policies;
 
-import org.eclipse.gef.geometry.planar.Rectangle;
 import org.eclipse.gef.mvc.fx.policies.IFXOnClickPolicy;
 import org.eclipse.gef.mvc.parts.IContentPart;
 import org.eclipse.gef.mvc.parts.IRootPart;
@@ -11,17 +10,18 @@ import org.eclipse.gef.mvc.viewer.IViewer;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.reflect.TypeToken;
+import com.itemis.gef4.tutorial.mindmap.model.Connection;
 import com.itemis.gef4.tutorial.mindmap.model.MindMapNode;
 import com.itemis.gef4.tutorial.mindmap.models.ItemCreationModel;
+import com.itemis.gef4.tutorial.mindmap.models.ItemCreationModel.Type;
+import com.itemis.gef4.tutorial.mindmap.parts.ConnectionPart;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapNodePart;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapPart;
 
-import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 
-public class CreateNodeOnClickPolicy extends AbstractInteractionPolicy<Node> implements IFXOnClickPolicy {
+public class CreateConnectionOnClickPolicy extends AbstractInteractionPolicy<Node> implements IFXOnClickPolicy {
 
 	@Override
 	public void click(MouseEvent e) {
@@ -30,10 +30,10 @@ public class CreateNodeOnClickPolicy extends AbstractInteractionPolicy<Node> imp
 			return;
 		}
 		
-		if (! (e.isPrimaryButtonDown() || e.isSecondaryButtonDown())) {
+		if (!e.isPrimaryButtonDown()) {
 			return;
 		}
-
+		
 		// get the creation model!
 		IViewer<Node> contentViewer = getContentViewer();
 		ItemCreationModel creationModel = contentViewer.getAdapter(ItemCreationModel.class);
@@ -41,23 +41,23 @@ public class CreateNodeOnClickPolicy extends AbstractInteractionPolicy<Node> imp
 			throw new IllegalStateException("A ItemCreationModel must be registered");
 		}
 
-		switch (creationModel.getType()) {
-		case Node:
-			createNode(e, creationModel);
-			return;
-		case None:
-		default:
+		if (creationModel.getType()!=Type.Connection) {
 			return;
 		}
+		
+		if (creationModel.getSource()==null) {
+			creationModel.setSource(getHost());
+			return; // wait for next click
+		}
 
-	}
+		MindMapNode source = (MindMapNode) creationModel.getSource().getContent();
+		MindMapNode target = getHost().getContent();
 
-	private IViewer<Node> getContentViewer() {
-		return getHost().getRoot().getViewer();
-	}
-
-	@SuppressWarnings("serial")
-	private void createNode(MouseEvent e, ItemCreationModel creationModel) {
+		if (source.equals(target)) {
+			creationModel.clearSettings();
+			return;
+		}
+		
 		// find model part
 		IRootPart<Node, ? extends Node> contentRoot = getContentViewer().getRootPart();
 		IVisualPart<Node, ? extends Node> modelPart = contentRoot.getChildrenUnmodifiable().get(0);
@@ -66,22 +66,16 @@ public class CreateNodeOnClickPolicy extends AbstractInteractionPolicy<Node> imp
 			throw new IllegalStateException("Cannot find MindMapPart.");
 		}
 
-		MindMapNode newNode = new MindMapNode();
-		newNode.setTite("New node");
-		newNode.setDescription("No description");
-		newNode.setColor(Color.GREEN);
-		newNode.setBounds(new Rectangle(0, 0, 50, 30));
+		Connection newConn = new Connection();
+		newConn.setSource(source);
+		newConn.setTarget(target);
 
-		// determine coordinates of prototype's origin in model coordinates
-		Point2D mouseInLocal = modelPart.getVisual().sceneToLocal(e.getSceneX(), e.getSceneY());
-		newNode.getBounds().setLocation(mouseInLocal.getX(), mouseInLocal.getY());
 
 		// create copy of host's geometry using CreationPolicy from root part
+		@SuppressWarnings("serial")
 		CreationPolicy<Node> creationPolicy = contentRoot.getAdapter(new TypeToken<CreationPolicy<Node>>() {});
 		init(creationPolicy);
-		
-		// we need to set the index in the child list, because we have a combined child list
-		MindMapNodePart createdPart = (MindMapNodePart) creationPolicy.create(newNode, (MindMapPart) modelPart, 0,
+		ConnectionPart createdPart = (ConnectionPart) creationPolicy.create(newConn, (MindMapPart) modelPart,
 				HashMultimap.<IContentPart<Node, ? extends Node>, String>create());
 		
 		if (createdPart!=null) {
@@ -91,6 +85,16 @@ public class CreateNodeOnClickPolicy extends AbstractInteractionPolicy<Node> imp
 				creationModel.clearSettings();
 			}
 		}
+		
+	}
+	
+	@Override
+	public MindMapNodePart getHost() {
+		return (MindMapNodePart) super.getHost();
+	}
+	
+	private IViewer<Node> getContentViewer() {
+		return getHost().getRoot().getViewer();
 	}
 
 }

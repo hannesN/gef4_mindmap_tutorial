@@ -8,6 +8,7 @@ import org.eclipse.gef.mvc.parts.IVisualPart;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.SetMultimap;
+import com.itemis.gef4.tutorial.mindmap.model.Connection;
 import com.itemis.gef4.tutorial.mindmap.model.MindMap;
 import com.itemis.gef4.tutorial.mindmap.model.MindMapNode;
 
@@ -60,7 +61,9 @@ public class MindMapPart extends AbstractFXContentPart<Group> {
 	@Override
 	protected void doAddContentChild(Object contentChild, int index) {
 		if (contentChild instanceof MindMapNode) {
-			getContent().addNode((MindMapNode) contentChild);
+			getContent().addNode((MindMapNode) contentChild, index);
+		} else if (contentChild instanceof Connection) {
+			getContent().addConnection((Connection) contentChild);
 		} else {
 			throw new IllegalArgumentException("contentChild has invalid type: "+contentChild.getClass());
 		}
@@ -70,6 +73,8 @@ public class MindMapPart extends AbstractFXContentPart<Group> {
 	protected void doRemoveContentChild(Object contentChild) {
 		if (contentChild instanceof MindMapNode) {
 			getContent().removeNode((MindMapNode) contentChild);
+		} else if (contentChild instanceof Connection) {
+			getContent().removeConnection((Connection) contentChild);
 		} else {
 			throw new IllegalArgumentException("contentChild has invalid type: "+contentChild.getClass());
 		}

@@ -32,7 +32,7 @@ instead of adding the ÌnifiniteCanvas to the scene, we create a new BorderPane,
 
 4. Let's add a property listener to the selection property and set the model, if the button is pressed or released.
 
-5. Now create a new Policy which listens to clicks in the MindMap, checks whether the creation model is configured for a type and create a new one. If we pressed the orimary button we clear the selection. The secondary button will stay in the creation mode and we can create more nodes.
+5. Now create a new Policy which listens to clicks in the MindMap, checks whether the creation model is configured for a type and create a new one. If we pressed the primary button we clear the selection. The secondary button will stay in the creation mode and we can create more nodes.
 
 6. Now we bind the policy to our ContentRootPart. 
 

@@ -2,10 +2,8 @@ package com.itemis.gef4.tutorial.mindmap.model;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 /**
  * A mindmap is the container of all our nodes and connections
@@ -20,8 +18,11 @@ public class MindMap extends AbstractMindMapModel {
 
 	public static final String PROP_NODES = "nodes";
 	
+	public static final String PROP_CONNECTIONS = "connections";
 	
 	private List<MindMapNode> nodes = Lists.newArrayList();
+	
+	private List<Connection> connections = Lists.newArrayList();
 	
 	
 	public List<MindMapNode> getNodes() {
@@ -32,6 +33,11 @@ public class MindMap extends AbstractMindMapModel {
 		nodes.add(node);
 		pcs.firePropertyChange(PROP_NODES, null, node);
 	}
+	
+	public void addNode(MindMapNode node, int idx) {
+		nodes.add(idx, node);
+		pcs.firePropertyChange(PROP_NODES, null, node);
+	}
 
 	public void removeNode(MindMapNode node) {
 		nodes.remove(node);
@@ -39,11 +45,21 @@ public class MindMap extends AbstractMindMapModel {
 	}
 
 	public Collection<? extends Object> getConnections() {
-		Set<Connection> connSet = Sets.newHashSet();
-		for (MindMapNode node : nodes) {
-			connSet.addAll(node.getOutgoingConnections());
-		}
-		return Lists.newArrayList(connSet);
+		return connections;
 	}
 	
+	public void addConnection(Connection conn, int idx) {
+		connections.add(idx, conn);
+		pcs.firePropertyChange(PROP_CONNECTIONS, null, conn);
+	}
+	
+	public void addConnection(Connection conn) {
+		connections.add(conn);
+		pcs.firePropertyChange(PROP_CONNECTIONS, null, conn);
+	}
+	
+	public void removeConnection(Connection conn) {
+		connections.remove(conn);
+		pcs.firePropertyChange(PROP_CONNECTIONS, conn, null);
+	}
 }
