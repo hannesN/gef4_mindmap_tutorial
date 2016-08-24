@@ -1,6 +1,5 @@
 package com.itemis.gef4.tutorial.mindmap.model;
 
-import java.util.Collection;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -15,51 +14,27 @@ public class MindMap extends AbstractMindMapModel {
 	
 	private static final long serialVersionUID = 4667064215236604843L;
 
-
-	public static final String PROP_NODES = "nodes";
+	public static final String PROP_CHILD_ELEMENTS = "childElements";
 	
-	public static final String PROP_CONNECTIONS = "connections";
+	private List<AbstractMindMapModel> childElements = Lists.newArrayList();
 	
-	private List<MindMapNode> nodes = Lists.newArrayList();
-	
-	private List<Connection> connections = Lists.newArrayList();
-	
-	
-	public List<MindMapNode> getNodes() {
-		return nodes;
+	public List<AbstractMindMapModel> getChildElements() {
+		return childElements;
 	}
 	
-	public void addNode(MindMapNode node) {
-		nodes.add(node);
-		pcs.firePropertyChange(PROP_NODES, null, node);
+	public void addChildElement(AbstractMindMapModel node) {
+		childElements.add(node);
+		pcs.firePropertyChange(PROP_CHILD_ELEMENTS, null, node);
 	}
 	
-	public void addNode(MindMapNode node, int idx) {
-		nodes.add(idx, node);
-		pcs.firePropertyChange(PROP_NODES, null, node);
+	public void addChildElement(AbstractMindMapModel node, int idx) {
+		childElements.add(idx, node);
+		pcs.firePropertyChange(PROP_CHILD_ELEMENTS, null, node);
 	}
 
-	public void removeNode(MindMapNode node) {
-		nodes.remove(node);
-		pcs.firePropertyChange(PROP_NODES, node, null);
+	public void removeChildElement(AbstractMindMapModel node) {
+		childElements.remove(node);
+		pcs.firePropertyChange(PROP_CHILD_ELEMENTS, node, null);
 	}
 
-	public Collection<? extends Object> getConnections() {
-		return connections;
-	}
-	
-	public void addConnection(Connection conn, int idx) {
-		connections.add(idx, conn);
-		pcs.firePropertyChange(PROP_CONNECTIONS, null, conn);
-	}
-	
-	public void addConnection(Connection conn) {
-		connections.add(conn);
-		pcs.firePropertyChange(PROP_CONNECTIONS, null, conn);
-	}
-	
-	public void removeConnection(Connection conn) {
-		connections.remove(conn);
-		pcs.firePropertyChange(PROP_CONNECTIONS, conn, null);
-	}
 }

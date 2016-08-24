@@ -8,9 +8,8 @@ import org.eclipse.gef.mvc.parts.IVisualPart;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.SetMultimap;
-import com.itemis.gef4.tutorial.mindmap.model.Connection;
+import com.itemis.gef4.tutorial.mindmap.model.AbstractMindMapModel;
 import com.itemis.gef4.tutorial.mindmap.model.MindMap;
-import com.itemis.gef4.tutorial.mindmap.model.MindMapNode;
 
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -29,12 +28,7 @@ public class MindMapPart extends AbstractFXContentPart<Group> {
 
 	@Override
 	protected List<? extends Object> doGetContentChildren() {
-		List<Object> children = Lists.newArrayList();
-		
-		children.addAll(getContent().getNodes());
-		children.addAll(getContent().getConnections());
-		
-		return children;
+		return Lists.newArrayList(getContent().getChildElements());
 	}
 
 	@Override
@@ -60,10 +54,8 @@ public class MindMapPart extends AbstractFXContentPart<Group> {
 	
 	@Override
 	protected void doAddContentChild(Object contentChild, int index) {
-		if (contentChild instanceof MindMapNode) {
-			getContent().addNode((MindMapNode) contentChild, index);
-		} else if (contentChild instanceof Connection) {
-			getContent().addConnection((Connection) contentChild);
+		if (contentChild instanceof AbstractMindMapModel) {
+			getContent().addChildElement((AbstractMindMapModel) contentChild, index);
 		} else {
 			throw new IllegalArgumentException("contentChild has invalid type: "+contentChild.getClass());
 		}
@@ -71,10 +63,8 @@ public class MindMapPart extends AbstractFXContentPart<Group> {
 	
 	@Override
 	protected void doRemoveContentChild(Object contentChild) {
-		if (contentChild instanceof MindMapNode) {
-			getContent().removeNode((MindMapNode) contentChild);
-		} else if (contentChild instanceof Connection) {
-			getContent().removeConnection((Connection) contentChild);
+		if (contentChild instanceof AbstractMindMapModel) {
+			getContent().removeChildElement((AbstractMindMapModel) contentChild);
 		} else {
 			throw new IllegalArgumentException("contentChild has invalid type: "+contentChild.getClass());
 		}

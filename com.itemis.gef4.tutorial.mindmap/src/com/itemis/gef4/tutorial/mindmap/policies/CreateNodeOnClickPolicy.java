@@ -80,8 +80,7 @@ public class CreateNodeOnClickPolicy extends AbstractInteractionPolicy<Node> imp
 		CreationPolicy<Node> creationPolicy = contentRoot.getAdapter(new TypeToken<CreationPolicy<Node>>() {});
 		init(creationPolicy);
 		
-		// we need to set the index in the child list, because we have a combined child list
-		MindMapNodePart createdPart = (MindMapNodePart) creationPolicy.create(newNode, (MindMapPart) modelPart, 0,
+		MindMapNodePart createdPart = (MindMapNodePart) creationPolicy.create(newNode, (MindMapPart) modelPart,
 				HashMultimap.<IContentPart<Node, ? extends Node>, String>create());
 		
 		if (createdPart!=null) {

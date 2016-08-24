@@ -15,7 +15,7 @@ public class MindMapFactory {
 		center.setColor(Color.GREENYELLOW);
 		center.setBounds(new Rectangle(20,  50, 100, 100));
 		
-		mindMap.addNode(center);
+		mindMap.addChildElement(center);
 		
 		return mindMap;
 	}
@@ -29,7 +29,7 @@ public class MindMapFactory {
 		center.setColor(Color.GREENYELLOW);
 		center.setBounds(new Rectangle(250,  50, 100, 100));
 		
-		mindMap.addNode(center);
+		mindMap.addChildElement(center);
 		
 		MindMapNode child = null;
 		for (int i=0; i<5; i++) {
@@ -39,10 +39,11 @@ public class MindMapFactory {
 			child.setColor(Color.ALICEBLUE);
 			
 			child.setBounds(new Rectangle(50+(i*200),  250, 100, 100));
-			mindMap.addNode(child);
+			mindMap.addChildElement(child);
 			
 			Connection conn = new Connection();
 			conn.connect(center, child);
+			mindMap.addChildElement(conn);
 		}
 		
 		MindMapNode child2 = new MindMapNode();
@@ -50,10 +51,11 @@ public class MindMapFactory {
 		child2.setDescription("I just realized, this is related to the last idea!");
 		child2.setColor(Color.LIGHTGRAY);
 		child2.setBounds(new Rectangle(250,  550, 100, 100));
-		mindMap.addNode(child2);
+		mindMap.addChildElement(child2);
 		
 		Connection conn = new Connection();
 		conn.connect(child, child2);
+		mindMap.addChildElement(conn);
 		
 		return mindMap;
 		
