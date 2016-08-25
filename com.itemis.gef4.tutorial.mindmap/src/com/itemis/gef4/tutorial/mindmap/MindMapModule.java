@@ -1,13 +1,14 @@
 package com.itemis.gef4.tutorial.mindmap;
 
-
 import org.eclipse.gef.common.adapt.AdapterKey;
 import org.eclipse.gef.common.adapt.inject.AdaptableScopes;
 import org.eclipse.gef.common.adapt.inject.AdapterMaps;
 import org.eclipse.gef.mvc.behaviors.HoverBehavior;
+import org.eclipse.gef.mvc.behaviors.SelectionBehavior;
 import org.eclipse.gef.mvc.fx.MvcFxModule;
 import org.eclipse.gef.mvc.fx.behaviors.FXHoverBehavior;
 import org.eclipse.gef.mvc.fx.parts.FXDefaultHoverFeedbackPartFactory;
+import org.eclipse.gef.mvc.fx.parts.FXDefaultHoverHandlePartFactory;
 import org.eclipse.gef.mvc.fx.parts.FXDefaultSelectionFeedbackPartFactory;
 import org.eclipse.gef.mvc.fx.parts.FXDefaultSelectionHandlePartFactory;
 import org.eclipse.gef.mvc.fx.parts.FXSquareSegmentHandlePart;
@@ -28,9 +29,12 @@ import com.itemis.gef4.tutorial.mindmap.models.ItemCreationModel;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapContentsFactory;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapNodeAnchorProvider;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapNodePart;
+import com.itemis.gef4.tutorial.mindmap.parts.handles.DeleteMindMapNodeHandlePart;
 import com.itemis.gef4.tutorial.mindmap.parts.handles.MindMapHoverHandleFactory;
+import com.itemis.gef4.tutorial.mindmap.parts.handles.MindMapSelectionHandleFactory;
 import com.itemis.gef4.tutorial.mindmap.policies.CreateConnectionOnClickPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.CreateNodeOnClickPolicy;
+import com.itemis.gef4.tutorial.mindmap.policies.DeleteMindMapNodeOnClickPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.InlineEditPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.MindMapNodeResizePolicy;
 
@@ -55,14 +59,19 @@ public class MindMapModule extends MvcFxModule {
 
 		// binding our self makde models to the scope of FXViewer
 		bindModels();
-		
+
 		bindMindMapNodePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), MindMapNodePart.class));
 
+		// registering the click policy for our delete handle
+		bindDeleteMindMapNodeHandlePart(AdapterMaps.getAdapterMapBinder(binder(), DeleteMindMapNodeHandlePart.class));
+		
 		// with this binding we create the handles
 		bindFXSquareSegmentHandlePartPartAdapter(
 				AdapterMaps.getAdapterMapBinder(binder(), FXSquareSegmentHandlePart.class));
 	}
+
 	
+
 	@Override
 	protected void bindIContentPartFactoryAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		super.bindIContentPartFactoryAsContentViewerAdapter(adapterMapBinder);
@@ -83,66 +92,41 @@ public class MindMapModule extends MvcFxModule {
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXHoverOnHoverPolicy.class);
 	}
 
-	protected void bindMindMapNodePartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-
-//		// add behaviour to react on hover model changes
-//		// TODO check why it is explicitly needed here but not in the other examples
-//		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXHoverBehavior.class);
-		
-		// provides a hover feedback to the shape, on mouse over.
-		AdapterKey<?> role = AdapterKey.role(FXDefaultHoverFeedbackPartFactory.HOVER_FEEDBACK_GEOMETRY_PROVIDER);
-		adapterMapBinder.addBinding(role).to(ShapeOutlineProvider.class);
-
-		role = AdapterKey.role(FXDefaultSelectionFeedbackPartFactory.SELECTION_FEEDBACK_GEOMETRY_PROVIDER);
-		adapterMapBinder.addBinding(role).to(ShapeBoundsProvider.class);
-
-		// shape outline provider used in the anchor provider
-		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(ShapeOutlineProvider.class);
-		
-		// bind anchor provider
-		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(MindMapNodeAnchorProvider.class);
-
-		// bind drag policies
-		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXTransformPolicy.class);
-		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXTranslateSelectedOnDragPolicy.class);
-
-		// bind our resize policy
-		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(MindMapNodeResizePolicy.class);
-
-		// specify the factory to create the geometry object for the selection
-		// handles
-		role = AdapterKey.role(FXDefaultSelectionHandlePartFactory.SELECTION_HANDLES_GEOMETRY_PROVIDER);
-		adapterMapBinder.addBinding(role).to(ShapeBoundsProvider.class);
-		
-		// adding the inline edit policy to the part to listen to double clicks on "fields"
-		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(InlineEditPolicy.class);
-		
-		// adding the connection creation
-		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(CreateConnectionOnClickPolicy.class);
-
-	}
-
-	protected void bindFXSquareSegmentHandlePartPartAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-
-		adapterMapBinder.addBinding(AdapterKey.defaultRole())
-				.to(FXResizeTranslateFirstAnchorageOnHandleDragPolicy.class);
-	}
-	
 	@Override
 	protected void bindContentViewerRootPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		super.bindContentViewerRootPartAdapters(adapterMapBinder);
-		
+
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(CreateNodeOnClickPolicy.class);
 
 		// hover behavior
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXHoverBehavior.class);
 	}
-	
+
 	@Override
 	protected void bindContentViewerAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		super.bindContentViewerAdapters(adapterMapBinder);
 		bindInlineEditModelAsContentViewerAdapter(adapterMapBinder);
 		bindItemCreationEditModelAsContentViewerAdapter(adapterMapBinder);
+	}
+
+	@Override
+	protected void bindHoverHandlePartFactoryAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		// adding our handle factory
+		adapterMapBinder.addBinding(AdapterKey.role(HoverBehavior.HOVER_HANDLE_PART_FACTORY))
+				.to(MindMapHoverHandleFactory.class);
+	}
+
+	@Override
+	protected void bindSelectionHandlePartFactoryAsContentViewerAdapter(
+			MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder.addBinding(AdapterKey.role(SelectionBehavior.SELECTION_HANDLE_PART_FACTORY))
+				.to(MindMapSelectionHandleFactory.class);
+	}
+
+	protected void bindFXSquareSegmentHandlePartPartAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+	
+		adapterMapBinder.addBinding(AdapterKey.defaultRole())
+				.to(FXResizeTranslateFirstAnchorageOnHandleDragPolicy.class);
 	}
 
 	protected void bindInlineEditModelAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
@@ -155,16 +139,61 @@ public class MindMapModule extends MvcFxModule {
 		adapterMapBinder.addBinding(key).to(ItemCreationModel.class);
 	}
 
-	@Override
-	protected void bindHoverHandlePartFactoryAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		// adding our handle factory
-		adapterMapBinder.addBinding(AdapterKey.role(HoverBehavior.HOVER_HANDLE_PART_FACTORY)).to(MindMapHoverHandleFactory.class);
+	protected void bindMindMapNodePartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+	
+		// // add behaviour to react on hover model changes
+		// // TODO check why it is explicitly needed here but not in the other
+		// examples
+		// adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXHoverBehavior.class);
+	
+		// provides a hover feedback to the shape, on mouse over.
+		AdapterKey<?> role = AdapterKey.role(FXDefaultHoverFeedbackPartFactory.HOVER_FEEDBACK_GEOMETRY_PROVIDER);
+		adapterMapBinder.addBinding(role).to(ShapeOutlineProvider.class);
+		
+		// add a bounds provider for the HoverHandleFactory
+		role = AdapterKey.role(FXDefaultHoverHandlePartFactory.HOVER_HANDLES_GEOMETRY_PROVIDER);
+		adapterMapBinder.addBinding(role).to(ShapeBoundsProvider.class);
+	
+		role = AdapterKey.role(FXDefaultSelectionFeedbackPartFactory.SELECTION_FEEDBACK_GEOMETRY_PROVIDER);
+		adapterMapBinder.addBinding(role).to(ShapeBoundsProvider.class);
+		
+		// add a bounds provider for the SelectionHandleFactory
+		role = AdapterKey.role(FXDefaultSelectionHandlePartFactory.SELECTION_HANDLES_GEOMETRY_PROVIDER);
+		adapterMapBinder.addBinding(role).to(ShapeBoundsProvider.class);
+	
+		// shape outline provider used in the anchor provider
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(ShapeOutlineProvider.class);
+	
+		// bind anchor provider
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(MindMapNodeAnchorProvider.class);
+	
+		// bind drag policies
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXTransformPolicy.class);
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXTranslateSelectedOnDragPolicy.class);
+	
+		// bind our resize policy
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(MindMapNodeResizePolicy.class);
+	
+		// specify the factory to create the geometry object for the selection
+		// handles
+		role = AdapterKey.role(FXDefaultSelectionHandlePartFactory.SELECTION_HANDLES_GEOMETRY_PROVIDER);
+		adapterMapBinder.addBinding(role).to(ShapeBoundsProvider.class);
+	
+		// adding the inline edit policy to the part to listen to double clicks
+		// on "fields"
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(InlineEditPolicy.class);
+	
+		// adding the connection creation
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(CreateConnectionOnClickPolicy.class);
+	
 	}
-
-	@Override
-	protected void bindHoverFeedbackPartFactoryAsContentViewerAdapter(
-			MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		super.bindHoverFeedbackPartFactoryAsContentViewerAdapter(adapterMapBinder);
+	
+	/**
+	 * Registers the delete policy for the {@link DeleteMindMapNodeHandlePart}
+	 * @param adapterMapBinder
+	 */
+	protected void bindDeleteMindMapNodeHandlePart(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(DeleteMindMapNodeOnClickPolicy.class);
 	}
 	
 	protected void bindModels() {
