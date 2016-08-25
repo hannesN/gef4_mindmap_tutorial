@@ -1,5 +1,9 @@
 package com.itemis.gef4.tutorial.mindmap;
 
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.operations.IOperationHistoryListener;
+import org.eclipse.core.commands.operations.IUndoContext;
+import org.eclipse.core.commands.operations.OperationHistoryEvent;
 import org.eclipse.gef.common.adapt.AdapterKey;
 import org.eclipse.gef.mvc.fx.domain.FXDomain;
 import org.eclipse.gef.mvc.fx.viewer.FXViewer;
@@ -16,9 +20,11 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -81,6 +87,7 @@ public class MindMapApplication extends Application {
 		
 		BorderPane pane = new BorderPane(getContentViewer().getCanvas());
 		pane.setLeft(createPaletteNode());
+		pane.setTop(createToolbarNode());
 
 		pane.setPrefSize(800, 600);
 		
@@ -88,6 +95,48 @@ public class MindMapApplication extends Application {
 		primaryStage.setScene(scene);
 	}
 
+	private Node createToolbarNode() {
+		
+		Button undoButton = new Button("Undo");
+		undoButton.setDisable(true);
+		
+		undoButton.setOnAction((e) -> {
+			try {
+				domain.getOperationHistory().undo(domain.getUndoContext(), null, null);
+			} catch (ExecutionException e1) {
+				e1.printStackTrace();
+			}
+		});
+			
+		
+		Button redoButton = new Button("Redo");
+		redoButton.setDisable(true);
+		redoButton.setOnAction((e) -> {
+			try {
+				domain.getOperationHistory().redo(domain.getUndoContext(), null, null);
+			} catch (ExecutionException e1) {
+				e1.printStackTrace();
+			}
+		});
+		
+		
+		
+		
+		// add listener, so we can activate the buttons if undo/redo is possible
+		domain.getOperationHistory().addOperationHistoryListener(new IOperationHistoryListener() {
+			
+			@Override
+			public void historyNotification(OperationHistoryEvent event) {
+				IUndoContext undoContext = domain.getUndoContext();
+				undoButton.setDisable(!event.getHistory().canUndo(undoContext));
+				redoButton.setDisable(!event.getHistory().canRedo(undoContext));
+			}
+		});
+		
+		
+		return new HBox(undoButton, redoButton);
+	}
+	
 	private Node createPaletteNode() {
 		
 		// the toggleGroup makes sure, we only select one 
