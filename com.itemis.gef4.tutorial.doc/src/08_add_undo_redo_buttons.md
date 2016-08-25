@@ -17,7 +17,5 @@ We are used to a lot of common short cuts. One of the most common is CMD-Z (on M
 
 to be able to do that, we need to create a new Policy which listens to key pressed events.
 
-1. Create class `ShortcutHandlingPolicy`.
+1. Create class `ShortcutHandlingPolicy` and implement the functionality in the `typed`-method.
 2. Add it to the abstract edit parts and the Rootpart.
-
- Sadly the implementation is dependent on a buggy KeyEvent. In the german keyboard layout you have to press CMD-Y to get the event for CMD-Z.

@@ -7,12 +7,11 @@ import org.eclipse.gef.mvc.fx.policies.IFXOnTypePolicy;
 import org.eclipse.gef.mvc.policies.AbstractInteractionPolicy;
 
 import javafx.scene.Node;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 /**
- * Policy to implement some short cuts. Sadly the implementation is dependent on a buggy
- * keyEvent. In the german keyboard layout you have to press CMD-Y to get the event for CMD-Z.
+ * Policy to implement some short cuts. We need to use the typed method because it is the only
+ * event, which resolves the pressed key independent from the layout
  * 
  * 
  * @author hniederhausen
@@ -23,14 +22,6 @@ public class ShortcutHandlingPolicy extends AbstractInteractionPolicy<Node> impl
 	@Override
 	public void pressed(KeyEvent event) {
 		
-		if (event.getCode()==KeyCode.Z && event.isMetaDown()) {
-			if (event.isShiftDown()) {
-				redo();
-			} else {
-				undo();
-			}
-				
-		}
 	}
 
 	@Override
@@ -39,6 +30,16 @@ public class ShortcutHandlingPolicy extends AbstractInteractionPolicy<Node> impl
 
 	@Override
 	public void typed(KeyEvent event) {		
+		// here the pressed key is the right on
+		// so we use the typed event
+		if (event.getCharacter().equals("z") && event.isMetaDown()) {
+			if (event.isShiftDown()) {
+				redo();
+			} else {
+				undo();
+			}
+				
+		}
 	}
 
 	@Override
