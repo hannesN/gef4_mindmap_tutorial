@@ -2,6 +2,8 @@ package com.itemis.gef4.tutorial.mindmap.models;
 
 import org.eclipse.gef.mvc.parts.IContentPart;
 
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableObjectValue;
 import javafx.scene.control.ToggleButton;
 
 /**
@@ -20,21 +22,30 @@ public class ItemCreationModel {
 	/**
 	 * The kind of item to create
 	 */
-	private Type type = Type.None;
+	private SimpleObjectProperty<ItemCreationModel.Type> typeProperty;
 	
 	/**
 	 * The button, which configured the current state
 	 */
 	private ToggleButton pressedButton;
 	
-	private IContentPart<?, ?> source;
+	private SimpleObjectProperty<IContentPart<?, ?>> sourceProperty;
+	
+	public ItemCreationModel() {
+		typeProperty = new SimpleObjectProperty<ItemCreationModel.Type>(this, "type", Type.None);
+		sourceProperty = new SimpleObjectProperty<IContentPart<?,?>>(this, "source", null);
+	}
 	
 	public void setType(Type type) {
-		this.type = type;
+		typeProperty.set(type);
 	}
 	
 	public Type getType() {
-		return type;
+		return typeProperty.getValue();
+	}
+	
+	public ObservableObjectValue<Type> getTypeProperty() {
+		return typeProperty;
 	}
 	
 	public void setPressedButton(ToggleButton pressedButton) {
@@ -46,16 +57,19 @@ public class ItemCreationModel {
 			pressedButton.setSelected(false);
 		}
 		pressedButton = null;
-		source = null;
-		type=Type.None;
+		sourceProperty.setValue(null);
+		setType(Type.None);
 	}
 	
 	public void setSource(IContentPart<?, ?> source) {
-		this.source = source;
+		sourceProperty.setValue(source);
 	}
 	
 	public IContentPart<?, ?> getSource() {
-		return source;
+		return sourceProperty.get();
 	}
 	
+	public SimpleObjectProperty<IContentPart<?, ?>> getSourceProperty() {
+		return sourceProperty;
+	}
 }

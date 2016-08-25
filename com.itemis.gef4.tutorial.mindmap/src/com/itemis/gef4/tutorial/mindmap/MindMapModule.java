@@ -24,6 +24,7 @@ import org.eclipse.gef.mvc.parts.IContentPartFactory;
 
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
+import com.itemis.gef4.tutorial.mindmap.behaviours.CreateConnectionFeedbackBehaviour;
 import com.itemis.gef4.tutorial.mindmap.models.InlineEditModel;
 import com.itemis.gef4.tutorial.mindmap.models.ItemCreationModel;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapContentsFactory;
@@ -94,6 +95,8 @@ public class MindMapModule extends MvcFxModule {
 		
 		// bind the shortcut policy here
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(ShortcutHandlingPolicy.class);
+		
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(CreateConnectionFeedbackBehaviour.class);
 	}
 
 	@Override
