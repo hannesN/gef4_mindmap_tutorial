@@ -21,44 +21,57 @@ public class MindMapSelectionHandleFactory extends FXDefaultSelectionHandlePartF
 
 	@Inject
 	private Injector injector;
-	
-	@Override
-	protected List<IHandlePart<Node, ? extends Node>> createMultiSelectionHandleParts(
-			List<? extends IVisualPart<Node, ? extends Node>> targets, IBehavior<Node> contextBehavior,
-			Map<Object, Object> contextMap) {
-		// TODO Auto-generated method stub
-		return super.createMultiSelectionHandleParts(targets, contextBehavior, contextMap);
-	}
-	
+
 	@Override
 	protected List<IHandlePart<Node, ? extends Node>> createSingleSelectionHandleParts(
 			IVisualPart<Node, ? extends Node> target, IBehavior<Node> contextBehavior, Map<Object, Object> contextMap) {
-		
-		return createHandles(target);
+
+		// get the default handle parts, e.g. the resize handles
+		List<IHandlePart<Node, ? extends Node>> handleParts = super.createSingleSelectionHandleParts(target,
+				contextBehavior, contextMap);
+
+		handleParts.addAll(createHandles(target));
+
+		return handleParts;
 	}
 
 	@Override
 	protected List<IHandlePart<Node, ? extends Node>> createSingleSelectionHandlePartsForCurve(
 			IVisualPart<Node, ? extends Node> target, IBehavior<Node> contextBehavior, Map<Object, Object> contextMap,
 			Provider<BezierCurve[]> segmentsProvider) {
-		
-		return createHandles(target);
+
+		// get the default handle parts, e.g. the resize handles
+		List<IHandlePart<Node, ? extends Node>> handleParts = super.createSingleSelectionHandlePartsForCurve(target, contextBehavior, contextMap, segmentsProvider);
+
+		handleParts.addAll(createHandles(target));
+
+		return handleParts;
 	}
-	
+
 	@Override
 	protected List<IHandlePart<Node, ? extends Node>> createSingleSelectionHandlePartsForPolygonalOutline(
 			IVisualPart<Node, ? extends Node> target, IBehavior<Node> contextBehavior, Map<Object, Object> contextMap,
 			Provider<BezierCurve[]> segmentsProvider) {
-		
-		return createHandles(target);
+
+		// get the default handle parts, e.g. the resize handles
+		List<IHandlePart<Node, ? extends Node>> handleParts = super.createSingleSelectionHandlePartsForPolygonalOutline(target, contextBehavior, contextMap, segmentsProvider);
+
+		handleParts.addAll(createHandles(target));
+
+		return handleParts;
 	}
-	
+
 	@Override
 	protected List<IHandlePart<Node, ? extends Node>> createSingleSelectionHandlePartsForRectangularOutline(
 			IVisualPart<Node, ? extends Node> target, IBehavior<Node> contextBehavior, Map<Object, Object> contextMap,
 			Provider<BezierCurve[]> segmentsProvider) {
 
-		return createHandles(target);
+		// get the default handle parts, e.g. the resize handles
+		List<IHandlePart<Node, ? extends Node>> handleParts = super.createSingleSelectionHandlePartsForRectangularOutline(target, contextBehavior, contextMap, segmentsProvider);
+
+		handleParts.addAll(createHandles(target));
+
+		return handleParts;
 	}
 
 	private List<IHandlePart<Node, ? extends Node>> createHandles(IVisualPart<Node, ? extends Node> target) {
@@ -67,14 +80,14 @@ public class MindMapSelectionHandleFactory extends FXDefaultSelectionHandlePartF
 			// create root handle part
 			MindMapHandleRootPart parentHp = new MindMapHandleRootPart();
 			injector.injectMembers(parentHp);
-			
+
 			DeleteMindMapNodeHandlePart delHp = new DeleteMindMapNodeHandlePart();
 			injector.injectMembers(delHp);
 			parentHp.addChild(delHp);
-	
+
 			handles.add(parentHp);
 		}
 		return handles;
 	}
-	
+
 }

@@ -27,7 +27,13 @@ public class MindMapHoverHandleFactory extends FXDefaultHoverHandlePartFactory {
 			IVisualPart<Node, ? extends Node> target, IBehavior<Node> contextBehavior, Map<Object, Object> contextMap,
 			Provider<BezierCurve[]> segmentsProvider) {
 
-		return createHandlers(target);
+		// get the default handle parts, e.g. the resize handles
+		List<IHandlePart<Node, ? extends Node>> handleParts = super.createHoverHandlePartsForPolygonalOutline(target,
+				contextBehavior, contextMap, segmentsProvider);
+
+		handleParts.addAll(createHandles(target));
+
+		return handleParts;
 	}
 
 	@Override
@@ -35,38 +41,44 @@ public class MindMapHoverHandleFactory extends FXDefaultHoverHandlePartFactory {
 			IVisualPart<Node, ? extends Node> target, IBehavior<Node> contextBehavior, Map<Object, Object> contextMap,
 			Provider<BezierCurve[]> segmentsProvider) {
 
-		return createHandlers(target);
+		// get the default handle parts, e.g. the resize handles
+		List<IHandlePart<Node, ? extends Node>> handleParts = super.createHoverHandlePartsForPolygonalOutline(target, contextBehavior, contextMap, segmentsProvider);
+
+		handleParts.addAll(createHandles(target));
+
+		return handleParts;
 	}
-	
+
 	@Override
 	protected List<IHandlePart<Node, ? extends Node>> createHoverHandlePartsForCurve(
 			IVisualPart<Node, ? extends Node> target, IBehavior<Node> contextBehavior, Map<Object, Object> contextMap,
 			Provider<BezierCurve[]> segmentsProvider) {
 	
-		return createHandlers(target);
+		// get the default handle parts, e.g. the resize handles
+		List<IHandlePart<Node, ? extends Node>> handleParts = super.createHoverHandlePartsForCurve(target, contextBehavior, contextMap, segmentsProvider);
+
+		handleParts.addAll(createHandles(target));
+
+		return handleParts;
 	}
 
-	private List<IHandlePart<Node, ? extends Node>> createHandlers(IVisualPart<Node, ? extends Node> target) {
+	private List<IHandlePart<Node, ? extends Node>> createHandles(IVisualPart<Node, ? extends Node> target) {
 		List<IHandlePart<Node, ? extends Node>> handles = new ArrayList<>();
-		
+
 		if (target instanceof MindMapNodePart) {
 			// create root handle part
-			
+
 			MindMapHandleRootPart parentHp = new MindMapHandleRootPart();
 			injector.injectMembers(parentHp);
-			
+
 			DeleteMindMapNodeHandlePart delHp = new DeleteMindMapNodeHandlePart();
 			injector.injectMembers(delHp);
 			parentHp.addChild(delHp);
-			
-			
+
 			handles.add(parentHp);
-			
-			
-	
+
 		}
 		return handles;
 	}
-	
-	
+
 }
