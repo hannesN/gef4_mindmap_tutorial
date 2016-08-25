@@ -37,6 +37,7 @@ import com.itemis.gef4.tutorial.mindmap.policies.CreateNodeOnClickPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.DeleteMindMapNodeOnClickPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.InlineEditPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.MindMapNodeResizePolicy;
+import com.itemis.gef4.tutorial.mindmap.policies.ShortcutHandlingPolicy;
 
 import javafx.scene.Node;
 
@@ -90,6 +91,9 @@ public class MindMapModule extends MvcFxModule {
 		// content parts
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXFocusAndSelectOnClickPolicy.class);
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXHoverOnHoverPolicy.class);
+		
+		// bind the shortcut policy here
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(ShortcutHandlingPolicy.class);
 	}
 
 	@Override
@@ -100,6 +104,9 @@ public class MindMapModule extends MvcFxModule {
 
 		// hover behavior
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXHoverBehavior.class);
+		
+		// bind the shortcut policy here
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(ShortcutHandlingPolicy.class);
 	}
 
 	@Override
