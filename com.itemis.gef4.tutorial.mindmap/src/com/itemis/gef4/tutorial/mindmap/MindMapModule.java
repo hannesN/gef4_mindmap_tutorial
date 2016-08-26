@@ -12,7 +12,6 @@ import org.eclipse.gef.mvc.fx.parts.FXDefaultHoverHandlePartFactory;
 import org.eclipse.gef.mvc.fx.parts.FXDefaultSelectionFeedbackPartFactory;
 import org.eclipse.gef.mvc.fx.parts.FXDefaultSelectionHandlePartFactory;
 import org.eclipse.gef.mvc.fx.parts.FXSquareSegmentHandlePart;
-import org.eclipse.gef.mvc.fx.policies.FXFocusAndSelectOnClickPolicy;
 import org.eclipse.gef.mvc.fx.policies.FXHoverOnHoverPolicy;
 import org.eclipse.gef.mvc.fx.policies.FXResizeTranslateFirstAnchorageOnHandleDragPolicy;
 import org.eclipse.gef.mvc.fx.policies.FXTransformPolicy;
@@ -40,6 +39,7 @@ import com.itemis.gef4.tutorial.mindmap.policies.CreateConnectionOnClickPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.CreateNodeOnClickPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.DeleteMindMapNodeOnClickPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.InlineEditPolicy;
+import com.itemis.gef4.tutorial.mindmap.policies.MindMapFocusAndSelectOnClickPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.MindMapNodeResizePolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.ShortcutHandlingPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.ShowContextMenuOnClickPolicy;
@@ -97,7 +97,7 @@ public class MindMapModule extends MvcFxModule {
 		super.bindAbstractContentPartAdapters(adapterMapBinder);
 		// some policies who manage the behavior on mouse events on all of the
 		// content parts
-		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXFocusAndSelectOnClickPolicy.class);
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(MindMapFocusAndSelectOnClickPolicy.class);
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXHoverOnHoverPolicy.class);
 		
 		// bind the shortcut policy here
