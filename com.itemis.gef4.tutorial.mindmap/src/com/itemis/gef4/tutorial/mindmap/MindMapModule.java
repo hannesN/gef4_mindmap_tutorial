@@ -17,6 +17,7 @@ import org.eclipse.gef.mvc.fx.policies.FXHoverOnHoverPolicy;
 import org.eclipse.gef.mvc.fx.policies.FXResizeTranslateFirstAnchorageOnHandleDragPolicy;
 import org.eclipse.gef.mvc.fx.policies.FXTransformPolicy;
 import org.eclipse.gef.mvc.fx.policies.FXTranslateSelectedOnDragPolicy;
+import org.eclipse.gef.mvc.fx.providers.FXTransformProvider;
 import org.eclipse.gef.mvc.fx.providers.ShapeBoundsProvider;
 import org.eclipse.gef.mvc.fx.providers.ShapeOutlineProvider;
 import org.eclipse.gef.mvc.fx.viewer.FXViewer;
@@ -30,7 +31,8 @@ import com.itemis.gef4.tutorial.mindmap.models.ItemCreationModel;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapContentsFactory;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapNodeAnchorProvider;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapNodePart;
-import com.itemis.gef4.tutorial.mindmap.parts.feedback.ConnectionFeedbackPartFactory;
+import com.itemis.gef4.tutorial.mindmap.parts.feedback.CreateNodeFeedbackPart;
+import com.itemis.gef4.tutorial.mindmap.parts.feedback.CreationFeedbackPartFactory;
 import com.itemis.gef4.tutorial.mindmap.parts.handles.DeleteMindMapNodeHandlePart;
 import com.itemis.gef4.tutorial.mindmap.parts.handles.MindMapHoverHandleFactory;
 import com.itemis.gef4.tutorial.mindmap.parts.handles.MindMapSelectionHandleFactory;
@@ -68,11 +70,14 @@ public class MindMapModule extends MvcFxModule {
 		// registering the click policy for our delete handle
 		bindDeleteMindMapNodeHandlePart(AdapterMaps.getAdapterMapBinder(binder(), DeleteMindMapNodeHandlePart.class));
 		
+		bindCreateNodeFeedbackPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), CreateNodeFeedbackPart.class));
+		
 		// with this binding we create the handles
 		bindFXSquareSegmentHandlePartPartAdapter(
 				AdapterMaps.getAdapterMapBinder(binder(), FXSquareSegmentHandlePart.class));
 	}
 
+	
 	
 
 	@Override
@@ -124,7 +129,7 @@ public class MindMapModule extends MvcFxModule {
 		// bind the connection creation Feedback
 		adapterMapBinder
 				.addBinding(AdapterKey.role(CreateConnectionFeedbackBehaviour.CREATE_CONNECTION_FEEDBACK_PART_FACTORY))
-				.to(ConnectionFeedbackPartFactory.class);
+				.to(CreationFeedbackPartFactory.class);
 	}
 
 	@Override
@@ -158,11 +163,6 @@ public class MindMapModule extends MvcFxModule {
 	}
 
 	protected void bindMindMapNodePartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-	
-		// // add behaviour to react on hover model changes
-		// // TODO check why it is explicitly needed here but not in the other
-		// examples
-		// adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXHoverBehavior.class);
 	
 		// provides a hover feedback to the shape, on mouse over.
 		AdapterKey<?> role = AdapterKey.role(FXDefaultHoverFeedbackPartFactory.HOVER_FEEDBACK_GEOMETRY_PROVIDER);
@@ -206,6 +206,11 @@ public class MindMapModule extends MvcFxModule {
 	
 	}
 	
+	protected void bindCreateNodeFeedbackPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder.addBinding(AdapterKey.role(FXTransformPolicy.TRANSFORM_PROVIDER_KEY.getRole()))
+		.to(FXTransformProvider.class);
+	}
+
 	/**
 	 * Registers the delete policy for the {@link DeleteMindMapNodeHandlePart}
 	 * @param adapterMapBinder

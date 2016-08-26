@@ -59,6 +59,7 @@ public class MindMapNodePart extends AbstractFXContentPart<MindMapNodeVisual> im
 
 		visual.resizeShape(rec.getWidth(), rec.getHeight());
 		
+		// TODO what exactly happens here??
 		Affine affine = getAdapter(FXTransformPolicy.TRANSFORM_PROVIDER_KEY).get();
 		affine.setTx(rec.getX());
 		affine.setTy(rec.getY());

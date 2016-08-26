@@ -1,11 +1,7 @@
 package com.itemis.gef4.tutorial.mindmap.behaviours;
 
-import java.util.Collection;
-import java.util.List;
-
 import org.eclipse.gef.mvc.behaviors.AbstractBehavior;
 import org.eclipse.gef.mvc.parts.IContentPart;
-import org.eclipse.gef.mvc.parts.IFeedbackPart;
 import org.eclipse.gef.mvc.parts.IFeedbackPartFactory;
 import org.eclipse.gef.mvc.parts.IVisualPart;
 import org.eclipse.gef.mvc.viewer.IViewer;
@@ -25,11 +21,23 @@ public class CreateConnectionFeedbackBehaviour extends AbstractBehavior<Node> {
 	 */
 	public static final String CREATE_CONNECTION_FEEDBACK_PART_FACTORY = "CREATE_CONNECTION_FEEDBACK_PART_FACTORY";
 
+	private boolean clearable = false;
+	
 	// observing the model
 	private ChangeListener<Type> typeListener = new ChangeListener<Type>() {
 
 		@Override
 		public void changed(ObservableValue<? extends Type> observable, Type oldValue, Type newValue) {
+
+			// clearing feedback if creation type changes
+			clearFeedback();
+
+			// now check if we create a new node and actvate the feedback
+			if (newValue == Type.Node) {
+				// for the node creation we use the host as feedback anchor
+				addFeedback(getHost());
+			}
+
 		}
 	};
 	private ChangeListener<IContentPart<?, ?>> sourceListener = new ChangeListener<IContentPart<?, ?>>() {
@@ -38,9 +46,8 @@ public class CreateConnectionFeedbackBehaviour extends AbstractBehavior<Node> {
 		@Override
 		public void changed(ObservableValue<? extends IContentPart<?, ?>> observable, IContentPart<?, ?> oldValue,
 				IContentPart<?, ?> newValue) {
-			
-			System.out.println("Source istener: newsource: " + newValue);
-			if (newValue==null) {
+
+			if (newValue == null) {
 				clearFeedback();
 			} else {
 				addFeedback((IVisualPart<Node, ? extends Node>) newValue);
@@ -50,44 +57,26 @@ public class CreateConnectionFeedbackBehaviour extends AbstractBehavior<Node> {
 	};
 
 	@Override
+	protected void clearFeedback() {
+		if(!clearable)
+			return;
+		System.out.println("Clearin Feedback");
+		try {
+			super.clearFeedback();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw e;
+		}
+	}
+	
+	@Override
 	protected void addFeedback(IVisualPart<Node, ? extends Node> target) {
-		System.out.println("Add Feedback " + target);
+		clearable=true;
 		super.addFeedback(target);
 	}
 
 	@Override
-	protected void addFeedback(List<? extends IVisualPart<Node, ? extends Node>> targets) {
-		// TODO Auto-generated method stub
-		super.addFeedback(targets);
-	}
-
-	@Override
-	protected void addHandles(IVisualPart<Node, ? extends Node> target) {
-		System.out.println("Add Handles");
-		super.addHandles(target);
-	}
-
-	@Override
-	protected void addHandles(List<? extends IVisualPart<Node, ? extends Node>> targets) {
-		System.out.println("Add Handles taregts");
-		super.addHandles(targets);
-	}
-
-	@Override
-	protected void clearFeedback() {
-		System.out.println("Clear Feedback");
-		super.clearFeedback();
-	}
-
-	@Override
-	protected void clearHandles() {
-		// TODO Auto-generated method stub
-		super.clearHandles();
-	}
-
-	@Override
 	protected void doActivate() {
-		System.out.println("Do Activate");
 
 		ItemCreationModel creationModel = getCreationModel();
 
@@ -103,26 +92,11 @@ public class CreateConnectionFeedbackBehaviour extends AbstractBehavior<Node> {
 
 	@Override
 	protected void doDeactivate() {
-		System.out.println("Do Deactivate");
-
 		ItemCreationModel creationModel = getCreationModel();
 		creationModel.getTypeProperty().removeListener(typeListener);
 		creationModel.getSourceProperty().removeListener(sourceListener);
 
 		super.doDeactivate();
-	}
-
-	@Override
-	protected List<IFeedbackPart<Node, ? extends Node>> getFeedback(
-			Collection<? extends IVisualPart<Node, ? extends Node>> targets) {
-		System.out.println("Get Feedback targets");
-		return super.getFeedback(targets);
-	}
-
-	@Override
-	protected List<IFeedbackPart<Node, ? extends Node>> getFeedback(IVisualPart<Node, ? extends Node> target) {
-		System.out.println("Get Feedback");
-		return super.getFeedback(target);
 	}
 
 	@Override

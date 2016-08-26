@@ -134,14 +134,14 @@ public class MindMapNodeVisual extends Group {
 		double height = titleText.getBoundsInLocal().getHeight();
 		if (readOnlyField == titleText) {
 			inputControl = new TextField(titleText.getText());
-			// TODO listeners to extend the size
+			// TODO listeners to extend the field size
 
 		} else if (readOnlyField == descriptionText) {
 			inputControl = new TextArea(descriptionText.getText());
 			idx = 1;
 			height = shape.getBoundsInLocal().getHeight();
 
-			// TODO listeners
+			// TODO listeners to extend the text area
 		} else {
 			throw new IllegalArgumentException("Invalid entry");
 		}

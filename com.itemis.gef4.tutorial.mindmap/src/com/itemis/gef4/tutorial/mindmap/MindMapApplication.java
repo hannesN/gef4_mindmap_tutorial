@@ -151,11 +151,10 @@ public class MindMapApplication extends Application {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 				ItemCreationModel model = getContentViewer().getAdapter(ItemCreationModel.class);
+				model.clearSettings();
 				if (newValue) {
 					model.setPressedButton(addNodeButton);
 					model.setType(Type.Node);
-				} else {
-					model.clearSettings();
 				}
 			}
 			
@@ -170,11 +169,10 @@ public class MindMapApplication extends Application {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 				ItemCreationModel model = getContentViewer().getAdapter(ItemCreationModel.class);
+				model.clearSettings();
 				if (newValue) {
 					model.setPressedButton(addConnectionButton);
 					model.setType(Type.Connection);
-				} else {
-					model.clearSettings();
 				}
 			}
 		});

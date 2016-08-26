@@ -69,7 +69,7 @@ public class CreateNodeOnClickPolicy extends AbstractInteractionPolicy<Node> imp
 		MindMapNode newNode = new MindMapNode();
 		newNode.setTite("New node");
 		newNode.setDescription("No description");
-		newNode.setColor(Color.GREEN);
+		newNode.setColor(Color.GREENYELLOW);
 		newNode.setBounds(new Rectangle(0, 0, 50, 30));
 
 		// determine coordinates of prototype's origin in model coordinates
