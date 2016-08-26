@@ -42,6 +42,7 @@ import com.itemis.gef4.tutorial.mindmap.policies.DeleteMindMapNodeOnClickPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.InlineEditPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.MindMapNodeResizePolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.ShortcutHandlingPolicy;
+import com.itemis.gef4.tutorial.mindmap.policies.ShowContextMenuOnClickPolicy;
 
 import javafx.scene.Node;
 
@@ -204,6 +205,8 @@ public class MindMapModule extends MvcFxModule {
 		// adding the connection creation
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(CreateConnectionOnClickPolicy.class);
 	
+		// binding the context menu to the part
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(ShowContextMenuOnClickPolicy.class);
 	}
 	
 	protected void bindCreateNodeFeedbackPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
