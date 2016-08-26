@@ -7,7 +7,6 @@ import org.eclipse.gef.mvc.viewer.IViewer;
 
 import com.itemis.gef4.tutorial.mindmap.visuals.MindMapNodeVisual;
 
-import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
@@ -25,23 +24,23 @@ public class CreateNodeFeedbackPart extends AbstractFeedbackPart<Node, MindMapNo
 
 		visual.setTitle("New node");
 		visual.setDescription("No description");
-		visual.setColor(Color.GREENYELLOW);
+		visual.resizeShape(50, 40);
+		// its Color.GREENYELLOW witt less opacity
+		Color greenyellow = new Color(0.6784314f, 0.6784314f, 0.6784314f, 0.4f);
+		visual.setColor(greenyellow);
 
+		
+		
 		return visual;
 
 	}
 	
 	@Override
 	protected void doRefreshVisual(MindMapNodeVisual visual) {
-		System.out.println("refreshing visual");
-
 		// do not forget to bin a Transform provider to the this FeedbackPart!
 		Affine affine = getAdapter(FXTransformPolicy.TRANSFORM_PROVIDER_KEY).get();
-		// set the center to the visual
-		Bounds b = visual.getBoundsInLocal();
-		b.getWidth();
-		affine.setTx(posX-b.getWidth()/2); 
-		affine.setTy(posY-b.getHeight()/2);
+		affine.setTx(posX); 
+		affine.setTy(posY);
 	}
 
 	@Override
