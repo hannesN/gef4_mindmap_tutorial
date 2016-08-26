@@ -2,14 +2,11 @@ package com.itemis.gef4.tutorial.mindmap.behaviours;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.gef.mvc.behaviors.AbstractBehavior;
 import org.eclipse.gef.mvc.parts.IContentPart;
 import org.eclipse.gef.mvc.parts.IFeedbackPart;
 import org.eclipse.gef.mvc.parts.IFeedbackPartFactory;
-import org.eclipse.gef.mvc.parts.IHandlePartFactory;
 import org.eclipse.gef.mvc.parts.IVisualPart;
 import org.eclipse.gef.mvc.viewer.IViewer;
 
@@ -22,21 +19,32 @@ import javafx.scene.Node;
 
 public class CreateConnectionFeedbackBehaviour extends AbstractBehavior<Node> {
 
+	/**
+	 * The adapter role for the {@link IFeedbackPartFactory} that is used to
+	 * generate hover feedback parts.
+	 */
+	public static final String CREATE_CONNECTION_FEEDBACK_PART_FACTORY = "CREATE_CONNECTION_FEEDBACK_PART_FACTORY";
+
 	// observing the model
 	private ChangeListener<Type> typeListener = new ChangeListener<Type>() {
 
 		@Override
 		public void changed(ObservableValue<? extends Type> observable, Type oldValue, Type newValue) {
-			System.out.println("Type Listener: " + newValue.toString());
-			addFeedback(getHost().getRoot());
 		}
 	};
 	private ChangeListener<IContentPart<?, ?>> sourceListener = new ChangeListener<IContentPart<?, ?>>() {
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public void changed(ObservableValue<? extends IContentPart<?, ?>> observable, IContentPart<?, ?> oldValue,
 				IContentPart<?, ?> newValue) {
+			
 			System.out.println("Source istener: newsource: " + newValue);
+			if (newValue==null) {
+				clearFeedback();
+			} else {
+				addFeedback((IVisualPart<Node, ? extends Node>) newValue);
+			}
 		}
 
 	};
@@ -119,51 +127,6 @@ public class CreateConnectionFeedbackBehaviour extends AbstractBehavior<Node> {
 
 	@Override
 	protected IFeedbackPartFactory<Node> getFeedbackPartFactory(IViewer<Node> viewer) {
-		System.out.println("Get FeedbackPartFactory");
-		return super.getFeedbackPartFactory(viewer);
+		return getFeedbackPartFactory(viewer, CREATE_CONNECTION_FEEDBACK_PART_FACTORY);
 	}
-
-	@Override
-	protected IFeedbackPartFactory<Node> getFeedbackPartFactory(IViewer<Node> viewer, String role) {
-		System.out.println("Get FeedbackPartFactory with role: " + role);
-		return super.getFeedbackPartFactory(viewer, role);
-	}
-
-	@Override
-	protected Map<Set<IVisualPart<Node, ? extends Node>>, List<IFeedbackPart<Node, ? extends Node>>> getFeedbackPerTargetSet() {
-		System.out.println("Get Feedback Per target Set");
-		return super.getFeedbackPerTargetSet();
-	}
-
-	@Override
-	protected IHandlePartFactory<Node> getHandlePartFactory(IViewer<Node> viewer) {
-		System.out.println("Get Handle PartFactory");
-		return super.getHandlePartFactory(viewer);
-	}
-
-	@Override
-	protected IHandlePartFactory<Node> getHandlePartFactory(IViewer<Node> viewer, String role) {
-		System.out.println("Get Handle PartFactory with role: " + role);
-		return super.getHandlePartFactory(viewer, role);
-	}
-
-	@Override
-	public IVisualPart<Node, ? extends Node> getHost() {
-		System.out.println("Get Host");
-		return super.getHost();
-	}
-
-	@Override
-	protected boolean hasFeedback(Collection<? extends IVisualPart<Node, ? extends Node>> targets) {
-		System.out.println("Has Feedback targets");
-		return super.hasFeedback(targets);
-	}
-
-	@Override
-	protected boolean hasFeedback(IVisualPart<Node, ? extends Node> target) {
-		System.out.println("Get Has Feedack");
-		return super.hasFeedback(target);
-	}
-	
-
 }

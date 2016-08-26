@@ -30,6 +30,7 @@ import com.itemis.gef4.tutorial.mindmap.models.ItemCreationModel;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapContentsFactory;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapNodeAnchorProvider;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapNodePart;
+import com.itemis.gef4.tutorial.mindmap.parts.feedback.ConnectionFeedbackPartFactory;
 import com.itemis.gef4.tutorial.mindmap.parts.handles.DeleteMindMapNodeHandlePart;
 import com.itemis.gef4.tutorial.mindmap.parts.handles.MindMapHoverHandleFactory;
 import com.itemis.gef4.tutorial.mindmap.parts.handles.MindMapSelectionHandleFactory;
@@ -96,7 +97,7 @@ public class MindMapModule extends MvcFxModule {
 		// bind the shortcut policy here
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(ShortcutHandlingPolicy.class);
 		
-		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(CreateConnectionFeedbackBehaviour.class);
+		
 	}
 
 	@Override
@@ -110,6 +111,8 @@ public class MindMapModule extends MvcFxModule {
 		
 		// bind the shortcut policy here
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(ShortcutHandlingPolicy.class);
+		
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(CreateConnectionFeedbackBehaviour.class);
 	}
 
 	@Override
@@ -117,6 +120,11 @@ public class MindMapModule extends MvcFxModule {
 		super.bindContentViewerAdapters(adapterMapBinder);
 		bindInlineEditModelAsContentViewerAdapter(adapterMapBinder);
 		bindItemCreationEditModelAsContentViewerAdapter(adapterMapBinder);
+
+		// bind the connection creation Feedback
+		adapterMapBinder
+				.addBinding(AdapterKey.role(CreateConnectionFeedbackBehaviour.CREATE_CONNECTION_FEEDBACK_PART_FACTORY))
+				.to(ConnectionFeedbackPartFactory.class);
 	}
 
 	@Override
