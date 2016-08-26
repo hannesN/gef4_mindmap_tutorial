@@ -29,8 +29,6 @@ public class CreateConnectionFeedbackPart extends AbstractFeedbackPart<Node, Nod
 	@Override
 	protected void attachToAnchorageVisual(IVisualPart<Node, ? extends Node> anchorage, String role) {
 		
-		System.out.println("Adding anchorage");
-		
 		// find a anchor provider, which must be registered in the module
 		// be aware to use the right interfaces (Proviser is used a lot)
 		@SuppressWarnings("serial")
@@ -45,7 +43,7 @@ public class CreateConnectionFeedbackPart extends AbstractFeedbackPart<Node, Nod
 		MousePositionAnchor endAnchor = new MousePositionAnchor(new Point(0,0));
 		getVisual().setEndAnchor(endAnchor);
 
-		// listen to any mouse move and reset the anchor
+		// listen to any mouse move and reposition the anchor
 		getRoot().getVisual().getScene().setOnMouseMoved(endAnchor);
 		
 	}
