@@ -35,7 +35,7 @@ public class CreateConnectionFeedbackBehaviour extends AbstractBehavior<Node> {
 			// now check if we create a new node and actvate the feedback
 			if (newValue == Type.Node) {
 				// for the node creation we use the host as feedback anchor
-				addFeedback(getHost());
+//				addFeedback(getHost());
 			}
 
 		}
