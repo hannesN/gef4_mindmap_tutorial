@@ -41,17 +41,19 @@ public class CreateConnectionFeedbackPart extends AbstractFeedbackPart<Node, Nod
 		getVisual().setStartAnchor(anchor);
 
 		MousePositionAnchor endAnchor = new MousePositionAnchor(new Point(0,0));
+		endAnchor.init();
 		getVisual().setEndAnchor(endAnchor);
-
-		// listen to any mouse move and reposition the anchor
-		getRoot().getVisual().getScene().setOnMouseMoved(endAnchor);
+		
+		
 		
 	}
 
 	@Override
 	protected void detachFromAnchorageVisual(IVisualPart<Node, ? extends Node> anchorage, String role) {
 		getVisual().setStartPoint(getVisual().getStartPoint());
+		((MousePositionAnchor) getVisual().getEndAnchor()).dispose();
 		getVisual().setEndPoint(getVisual().getEndPoint());
+		
 		
 	}
 	
@@ -67,11 +69,21 @@ public class CreateConnectionFeedbackPart extends AbstractFeedbackPart<Node, Nod
 		public MousePositionAnchor(Point referencePositionInScene) {
 			super(referencePositionInScene);
 		}
-
+		
+		public void init() {
+			// listen to any mouse move and reposition the anchor
+			getRoot().getVisual().getScene().addEventHandler(MouseEvent.MOUSE_MOVED, this);
+		}
+		
 		@Override
 		public void handle(MouseEvent event) {
 			Point v = new Point(event.getSceneX(), event.getSceneY());
 			referencePositionProperty().setValue(v);
+		}
+		
+		public void dispose() {
+			// listen to any mouse move and reposition the anchor
+			getRoot().getVisual().getScene().removeEventHandler(MouseEvent.MOUSE_MOVED, this);
 		}
 		
 	}
