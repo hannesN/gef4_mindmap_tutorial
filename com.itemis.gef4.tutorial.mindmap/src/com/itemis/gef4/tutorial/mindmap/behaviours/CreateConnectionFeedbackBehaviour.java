@@ -60,11 +60,9 @@ public class CreateConnectionFeedbackBehaviour extends AbstractBehavior<Node> {
 	protected void clearFeedback() {
 		if(!clearable)
 			return;
-		System.out.println("Clearin Feedback");
 		try {
 			super.clearFeedback();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			throw e;
 		}
 	}
