@@ -84,6 +84,10 @@ public class MindMapSelectionHandleFactory extends FXDefaultSelectionHandlePartF
 			DeleteMindMapNodeHandlePart delHp = new DeleteMindMapNodeHandlePart();
 			injector.injectMembers(delHp);
 			parentHp.addChild(delHp);
+			
+			CreateMindMapConnectionHandlePart creConnHp = new CreateMindMapConnectionHandlePart();
+			injector.injectMembers(creConnHp);
+			parentHp.addChild(creConnHp);
 
 			handles.add(parentHp);
 		}

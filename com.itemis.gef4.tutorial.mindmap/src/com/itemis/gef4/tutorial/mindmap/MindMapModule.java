@@ -32,12 +32,14 @@ import com.itemis.gef4.tutorial.mindmap.parts.MindMapNodeAnchorProvider;
 import com.itemis.gef4.tutorial.mindmap.parts.MindMapNodePart;
 import com.itemis.gef4.tutorial.mindmap.parts.feedback.CreateNodeFeedbackPart;
 import com.itemis.gef4.tutorial.mindmap.parts.feedback.CreationFeedbackPartFactory;
+import com.itemis.gef4.tutorial.mindmap.parts.handles.CreateMindMapConnectionHandlePart;
 import com.itemis.gef4.tutorial.mindmap.parts.handles.DeleteMindMapNodeHandlePart;
 import com.itemis.gef4.tutorial.mindmap.parts.handles.MindMapHoverHandleFactory;
 import com.itemis.gef4.tutorial.mindmap.parts.handles.MindMapSelectionHandleFactory;
 import com.itemis.gef4.tutorial.mindmap.policies.CreateConnectionOnClickPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.CreateNodeOnClickPolicy;
-import com.itemis.gef4.tutorial.mindmap.policies.DeleteMindMapNodeOnClickPolicy;
+import com.itemis.gef4.tutorial.mindmap.policies.handles.DeleteMindMapNodeOnClickPolicy;
+import com.itemis.gef4.tutorial.mindmap.policies.handles.StartCreateConnectionOnClickPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.InlineEditPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.MindMapFocusAndSelectOnClickPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.MindMapNodeResizePolicy;
@@ -71,7 +73,12 @@ public class MindMapModule extends MvcFxModule {
 		// registering the click policy for our delete handle
 		bindDeleteMindMapNodeHandlePart(AdapterMaps.getAdapterMapBinder(binder(), DeleteMindMapNodeHandlePart.class));
 		
+		// registering the create connection handle
+		bindCreateMindMapConnectionHandlePart(AdapterMaps.getAdapterMapBinder(binder(), CreateMindMapConnectionHandlePart.class));
+		
 		bindCreateNodeFeedbackPartAdapters(AdapterMaps.getAdapterMapBinder(binder(), CreateNodeFeedbackPart.class));
+		
+		
 		
 		// with this binding we create the handles
 		bindFXSquareSegmentHandlePartPartAdapter(
@@ -220,6 +227,14 @@ public class MindMapModule extends MvcFxModule {
 	 */
 	protected void bindDeleteMindMapNodeHandlePart(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(DeleteMindMapNodeOnClickPolicy.class);
+	}
+	
+	/**
+	 * Registers the delete policy for the {@link DeleteMindMapNodeHandlePart}
+	 * @param adapterMapBinder
+	 */
+	protected void bindCreateMindMapConnectionHandlePart(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(StartCreateConnectionOnClickPolicy.class);
 	}
 	
 	protected void bindModels() {
