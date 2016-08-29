@@ -36,6 +36,7 @@ import com.itemis.gef4.tutorial.mindmap.parts.handles.CreateMindMapConnectionHan
 import com.itemis.gef4.tutorial.mindmap.parts.handles.DeleteMindMapNodeHandlePart;
 import com.itemis.gef4.tutorial.mindmap.parts.handles.MindMapHoverHandleFactory;
 import com.itemis.gef4.tutorial.mindmap.parts.handles.MindMapSelectionHandleFactory;
+import com.itemis.gef4.tutorial.mindmap.policies.CancelCreationPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.CreateConnectionOnClickPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.CreateNodeOnClickPolicy;
 import com.itemis.gef4.tutorial.mindmap.policies.handles.DeleteMindMapNodeOnClickPolicy;
@@ -109,8 +110,6 @@ public class MindMapModule extends MvcFxModule {
 		
 		// bind the shortcut policy here
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(ShortcutHandlingPolicy.class);
-		
-		
 	}
 
 	@Override
@@ -126,6 +125,9 @@ public class MindMapModule extends MvcFxModule {
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(ShortcutHandlingPolicy.class);
 		
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(CreateConnectionFeedbackBehaviour.class);
+		
+		// bind the cancel creation policy
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(CancelCreationPolicy.class);
 	}
 
 	@Override

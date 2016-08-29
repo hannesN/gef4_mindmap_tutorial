@@ -145,7 +145,7 @@ public class MindMapApplication extends Application {
 		ToggleButton addNodeButton = new ToggleButton("New Node");
 		addNodeButton.setToggleGroup(toggleGroup);
 		addNodeButton.setPrefHeight(80);
-		
+		addNodeButton.setMaxWidth(Double.MAX_VALUE);  // with this the vbox layouter sets the width to the largest buttons
 		addNodeButton.selectedProperty().addListener(new ChangeListener<Boolean>() {
 
 			@Override
@@ -155,6 +155,7 @@ public class MindMapApplication extends Application {
 				if (newValue) {
 					model.setPressedButton(addNodeButton);
 					model.setType(Type.Node);
+					getContentViewer().getRootPart().getVisual().requestFocus();
 				}
 			}
 			
@@ -163,6 +164,7 @@ public class MindMapApplication extends Application {
 		ToggleButton addConnectionButton = new ToggleButton("New Connection");
 		addConnectionButton.setToggleGroup(toggleGroup);
 		addConnectionButton.setPrefHeight(80);
+		addConnectionButton.setMaxWidth(Double.MAX_VALUE); 
 		
 		addConnectionButton.selectedProperty().addListener(new ChangeListener<Boolean>() {
 
@@ -173,11 +175,12 @@ public class MindMapApplication extends Application {
 				if (newValue) {
 					model.setPressedButton(addConnectionButton);
 					model.setType(Type.Connection);
+					getContentViewer().getRootPart().getVisual().requestFocus();
 				}
 			}
 		});
 		
-		return new VBox(addNodeButton, addConnectionButton);
+		return new VBox(15, addNodeButton, addConnectionButton);
 	}
 
 	public static void main(String[] args) {

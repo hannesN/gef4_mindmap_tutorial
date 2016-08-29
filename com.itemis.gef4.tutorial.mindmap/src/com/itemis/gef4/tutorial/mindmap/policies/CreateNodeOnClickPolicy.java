@@ -30,7 +30,7 @@ public class CreateNodeOnClickPolicy extends AbstractInteractionPolicy<Node> imp
 			return;
 		}
 		
-		if (! (e.isPrimaryButtonDown() || e.isSecondaryButtonDown())) {
+		if (!e.isPrimaryButtonDown()) {
 			return;
 		}
 
@@ -86,7 +86,7 @@ public class CreateNodeOnClickPolicy extends AbstractInteractionPolicy<Node> imp
 		if (createdPart!=null) {
 			commit(creationPolicy);
 		
-			if (e.isPrimaryButtonDown()) {
+			if (!e.isShiftDown()) {
 				creationModel.clearSettings();
 			}
 		}
